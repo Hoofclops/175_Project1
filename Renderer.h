@@ -21,6 +21,7 @@
 #include "Color.h"
 #include "Polygon.h"
 #include "GraphicsAlgorithm.h"
+#include "ObjectEditor.h"
 
 //Should contain the pixel buffer and handle drawing of points, lines, and polygons
 class Renderer
@@ -33,7 +34,7 @@ private:
     Renderer();
     
     //Convert coordinate position to appropriate array index in pixel buffer
-    int PosToIndex(Vector2i pos);
+    static int PosToIndex(Vector2i pos);
     
 public:
     
@@ -51,14 +52,14 @@ public:
     }
     
     Vector2i GetScreenSize();
-    void SetScreenSize(Vector2i size);
+    static void SetScreenSize(Vector2i size);
     
-    void DrawPoint(Point point);
-    void DrawLine(Line line, Algo algo);
-    void DrawPolygon(Polygon poly);
+    static void DrawPoint(Point point);
+    static void DrawLine(Line line, Algo algo);
+    static void DrawPolygon(Polygon poly);
+    static void DrawScene();
     
     static void ClearBuffer();
-    
     static void DisplayPixelBuffer();
 };
 

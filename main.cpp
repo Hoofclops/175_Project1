@@ -23,7 +23,10 @@ int main(int argc, char *argv[])
     ///////////////////////////////////////
     //TEST CODE////////////////////////////
     InputOutputUtility::Instance()->ParsePolygonFile();
-//    ObjectEditor::Instance()->TranslatePolygon(0, Vector2i(10, 10));
+    Renderer::Instance()->DrawScene();
+    
+    ObjectEditor::Instance()->TranslatePolygon(0, Vector2i(100, 100));
+    Renderer::Instance()->DrawScene();
     //END TEST/////////////////////////////
     ///////////////////////////////////////
 

@@ -16,7 +16,6 @@ ObjectEditor::ObjectEditor(){}
 void ObjectEditor::CreatePolygon(deque<Vector2i> vertPositions)
 {
     Polygon poly = Polygon(vertPositions);
-    Renderer::Instance()->DrawPolygon(poly);
     sPolyList.push_back(poly);
 }
 
@@ -40,19 +39,10 @@ void ObjectEditor::TranslatePolygon(int polygonID, Vector2i translationVector)
         vertices[i].SetPos(Vector2i(x,y));
     }
     poly.SetVertices(vertices);
-    
-    //clear buffer
-    Renderer::Instance()->ClearBuffer();
-    
-    //redraw all polygons
-    RedrawScene();
+    sPolyList[polygonID] = poly;
 }
 
-void ObjectEditor::RedrawScene()
+deque<Polygon> ObjectEditor::GetPolygons()
 {
-    long n = sPolyList.size();
-    for(int i = 0; i < n; i++)
-    {
-        Renderer::Instance()->DrawPolygon(sPolyList[i]);
-    }
+    return sPolyList;
 }

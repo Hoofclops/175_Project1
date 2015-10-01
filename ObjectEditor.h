@@ -22,7 +22,6 @@ private:
     
     ObjectEditor();
     
-    static void RedrawScene();
 public:
     static ObjectEditor *Instance()
     {
@@ -35,6 +34,7 @@ public:
     
     static void TranslatePolygon(int polygonID, Vector2i translationVector);
     
+    deque<Polygon> GetPolygons();
 };
 
 
