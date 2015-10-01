@@ -6,10 +6,10 @@
 //  Copyright (c) 2015 Brandon Nguyen. All rights reserved.
 //
 
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#include <GLUT/glut.h>
-//#include <GL/glut.h>
+// #include <OpenGL/gl.h>
+// #include <OpenGL/glu.h>
+// #include <GLUT/glut.h>
+#include <GL/glut.h>
 #include "Vector2i.h"
 #include "Renderer.h"
 #include "ObjectEditor.h"

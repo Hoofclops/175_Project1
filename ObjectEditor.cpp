@@ -17,11 +17,13 @@ void ObjectEditor::CreatePolygon(deque<Vector2i> vertPositions)
 {
     Polygon poly = Polygon(vertPositions);
     sPolyList.push_back(poly);
+    Renderer::Instance()->DrawScene();
 }
 
 void ObjectEditor::TranslatePolygon(int polygonID, Vector2i translationVector)
 {
-    if(polygonID >= sPolyList.size())
+    unsigned int id = polygonID;
+    if(id >= sPolyList.size())
     {
         throw invalid_argument("Invalid Polygon ID");
     }
@@ -39,7 +41,9 @@ void ObjectEditor::TranslatePolygon(int polygonID, Vector2i translationVector)
         vertices[i].SetPos(Vector2i(x,y));
     }
     poly.SetVertices(vertices);
-    sPolyList[polygonID] = poly;
+    sPolyList[id] = poly;
+
+    Renderer::Instance()->DrawScene();
 }
 
 deque<Polygon> ObjectEditor::GetPolygons()

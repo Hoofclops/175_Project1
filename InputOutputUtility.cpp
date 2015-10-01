@@ -16,7 +16,8 @@ InputOutputUtility::InputOutputUtility(){}
 void InputOutputUtility::ParsePolygonFile()
 {
     ifstream fin;
-    fin.open("//Users//BrandonHome//Desktop//175//Project1//Project1//poly.txt");
+   fin.open("poly.txt");
+    // fin.open("//Users//BrandonHome//Desktop//175//Project1//Project1//poly.txt");
     if (!fin.good())
         throw runtime_error("Error opening poly.txt");
     

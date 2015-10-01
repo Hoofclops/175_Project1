@@ -82,6 +82,18 @@ void Renderer::DrawScene()
 {
     ClearBuffer();
     deque<Polygon> polys = ObjectEditor::Instance()->GetPolygons();
+
+    cout << "Drawing Polygon" << endl;
+    for(int i = 0; i < polys.size(); i++)
+    {
+        deque<Point> vertices = polys[i].GetVertices();
+        for(int j = 0; j < vertices.size(); j++)
+        {
+            cout << vertices[j].GetX() << ", ";
+            cout << vertices[j].GetY() << endl;;        
+        }
+    }
+
     long n = polys.size();
     for(int i = 0; i < n; i++)
     {
@@ -91,13 +103,13 @@ void Renderer::DrawScene()
 
 void Renderer::ClearBuffer()
 {
-//    int n = SCREEN_SIZE * SCREEN_SIZE * 3;
-//    for(int i = 0; i < n; i++)
-//    {
-//        sPixelBuffer[i] = 0.0f;
-//    }
-    
-    sPixelBuffer = new float[SCREEN_SIZE * SCREEN_SIZE * 3];
+    //sPixelBuffer = new float[SCREEN_SIZE * SCREEN_SIZE * 3];
+
+    int n = SCREEN_SIZE * SCREEN_SIZE * 3;
+    for(int i = 0; i < n; i++)
+    {
+        sPixelBuffer[i] = 0.0f;
+    }
 }
 
 void Renderer::DisplayPixelBuffer()

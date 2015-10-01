@@ -21,7 +21,6 @@ private:
     static int sCurrentID;
     
     ObjectEditor();
-    
 public:
     static ObjectEditor *Instance()
     {
@@ -33,8 +32,9 @@ public:
     static void CreatePolygon(deque<Vector2i> vertPositions);
     
     static void TranslatePolygon(int polygonID, Vector2i translationVector);
-    
+
     deque<Polygon> GetPolygons();
+    
 };
 
 

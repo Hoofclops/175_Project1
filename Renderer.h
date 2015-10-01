@@ -14,9 +14,11 @@
 #define CANVAS_GREEN 0
 #define CANVAS_BLUE 0
 
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#include <GLUT/glut.h>
+// #include <OpenGL/gl.h>
+// #include <OpenGL/glu.h>
+// #include <GLUT/glut.h>
+#include <GL/glut.h>
+#include <iostream>
 #include "Vector2i.h"
 #include "Color.h"
 #include "Polygon.h"
@@ -57,10 +59,12 @@ public:
     static void DrawPoint(Point point);
     static void DrawLine(Line line, Algo algo);
     static void DrawPolygon(Polygon poly);
-    static void DrawScene();
     
     static void ClearBuffer();
+    
     static void DisplayPixelBuffer();
+
+    static void DrawScene();
 };
 
 #endif /* defined(__Project1__Renderer__) */
