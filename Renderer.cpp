@@ -80,7 +80,7 @@ int Renderer::PosToIndex(Vector2i pos)
 
 void Renderer::DrawScene()
 {
-//    ClearBuffer();
+    ClearBuffer();
     deque<Polygon> polys = ObjectEditor::Instance()->GetPolygons();
     long n = polys.size();
     for(int i = 0; i < n; i++)
@@ -91,11 +91,13 @@ void Renderer::DrawScene()
 
 void Renderer::ClearBuffer()
 {
-    int n = SCREEN_SIZE * SCREEN_SIZE * 3;
-    for(int i = 0; i < n; i++)
-    {
-        sPixelBuffer[i] = 0;
-    }
+//    int n = SCREEN_SIZE * SCREEN_SIZE * 3;
+//    for(int i = 0; i < n; i++)
+//    {
+//        sPixelBuffer[i] = 0.0f;
+//    }
+    
+    sPixelBuffer = new float[SCREEN_SIZE * SCREEN_SIZE * 3];
 }
 
 void Renderer::DisplayPixelBuffer()
