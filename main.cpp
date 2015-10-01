@@ -9,6 +9,7 @@
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
 #include <GLUT/glut.h>
+//#include <GL/glut.h>
 #include "Vector2i.h"
 #include "Renderer.h"
 #include "ObjectEditor.h"
@@ -23,14 +24,9 @@ int main(int argc, char *argv[])
     ///////////////////////////////////////
     //TEST CODE////////////////////////////
     InputOutputUtility::Instance()->ParsePolygonFile();
-    Renderer::Instance()->DrawScene();
-    
     ObjectEditor::Instance()->TranslatePolygon(0, Vector2i(100, 100));
-    Renderer::Instance()->DrawScene();
     //END TEST/////////////////////////////
     ///////////////////////////////////////
-
-    //test branch
     
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE);
