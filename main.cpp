@@ -27,7 +27,6 @@ int main(int argc, char *argv[])
     //END TEST/////////////////////////////
     ///////////////////////////////////////
 
-    //test this shit
     
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE);
