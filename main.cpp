@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
 //    ObjectEditor::Instance()->TranslatePolygon(0, Vector2i(10, 10));
     //END TEST/////////////////////////////
     ///////////////////////////////////////
-    //Test Change
+    //Test Change////////
     
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE);
