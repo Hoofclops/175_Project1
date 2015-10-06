@@ -12,6 +12,7 @@
 #include <deque>
 #include <list>
 #include <stdexcept>
+#include <iostream>
 #include "Point.h"
 #include "Line.h"
 
@@ -27,8 +28,9 @@ public:
     Polygon(deque<Vector2i> vertPositions);
     
     deque<Point> GetVertices();
-    void SetVertices(deque<Point> vertices);
-    
+    void SetVertex(int index, Vector2i pos);
+    void SetVertices(deque<Point> verts);
+
     deque<Line> GetEdges();
 };
 #endif /* defined(__Project1__Polygon__) */

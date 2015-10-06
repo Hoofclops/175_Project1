@@ -20,16 +20,18 @@ private:
     
 public:
     
+    Point();
     Point(Vector2i pos);
     Point(Vector2i pos, Color color);
     Point(int x, int y);
     Point(int x, int y, Color color);
     
     Vector2i GetPos();
-    void SetPos(Vector2i pos);
     
     int GetX();
+    void SetX(int x);
     int GetY();
+    void SetY(int y);
     
     Color GetColor();
     void SetColor(Color color);

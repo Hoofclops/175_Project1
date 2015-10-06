@@ -5,9 +5,11 @@
 //  Created by Brandon Nguyen on 9/27/15.
 //  Copyright (c) 2015 Brandon Nguyen. All rights reserved.
 //
+//  Works Cited:
 //  Code for DDA algorithm taken from text book page:
 //  Code for Bresenham based off of code from text book page:
 //  Scan Line Algorithm based off of one described on http://www.cs.rit.edu/~icss571/filling/index.html
+//  Centroid algorithm based off of http://stackoverflow.com/questions/2792443/finding-the-centroid-of-a-polygon described at https://en.wikipedia.org/wiki/Centroid#Centroid_of_polygon
 
 #include "GraphicsAlgorithm.h"
 
@@ -18,7 +20,6 @@ refactor HandleNegativeSlope() and HandlePositiveSlope()
 /****************************
  *BRESENHAM HELPER FUNCTIONS*
  ****************************/
-
 int GraphicsAlgorithm::DetermineCase(float dy, float dx)
 {
     float m;
@@ -154,8 +155,8 @@ bool GraphicsAlgorithm::InitScanLineValues(Line line, ScanData* data)
 {
     int yMin, yMax;
     float xVal, inverseSlope;
-    int x1 = line.GetPointA()->GetX(), y1 = line.GetPointA()->GetY(),
-        x2 = line.GetPointB()->GetX(), y2 = line.GetPointB()->GetY();
+    int x1 = line.GetPointA().GetX(), y1 = line.GetPointA().GetY(),
+        x2 = line.GetPointB().GetX(), y2 = line.GetPointB().GetY();
     
     //Fill y values
     if(y1 == y2)
@@ -297,7 +298,7 @@ void GraphicsAlgorithm::DrawScanLine(int curY, list<ScanData> activeEdges)
 void GraphicsAlgorithm::LineDDA(Line line)
 {
     Renderer *renderer = Renderer::Instance();
-    Point a = *line.GetPointA(), b = *line.GetPointB();
+    Point a = line.GetPointA(), b = line.GetPointB();
     
     int dx = b.GetPos().mX - a.GetPos().mX,
         dy = b.GetPos().mY - a.GetPos().mY, steps;
@@ -332,7 +333,7 @@ void GraphicsAlgorithm::LineDDA(Line line)
 
 void GraphicsAlgorithm::LineBresenham(Line line)
 {
-    Point a = *line.GetPointA(), b = *line.GetPointB();
+    Point a = line.GetPointA(), b = line.GetPointB();
     //Ensure a -> b goes left to right
     if(a.GetX() > b.GetX())
     {
@@ -423,4 +424,48 @@ void GraphicsAlgorithm::PolyScanLine(Polygon poly)
             break;
         }
     }
+}
+
+Vector2i GraphicsAlgorithm::FindPolyCentroid(Polygon poly)
+{
+    deque<Point> vertices = poly.GetVertices();
+    
+    float x0 = 0.0f, y0 = 0.0f, x1 = 0.0f, y1 = 0.0f;
+    float a, area = 0.0f;
+    Vector2i centroid;
+    
+    long vertexCount = vertices.size();
+    
+    //handle first vertexCount-1 vertices
+    int i;
+    for(i = 0; i < vertexCount - 1; i++)
+    {
+        x0 = vertices[i].GetX();
+        y0 = vertices[i].GetY();
+        x1 = vertices[i+1].GetX();
+        y1 = vertices[i+1].GetY();
+        a = (x0*y1) - (x1*y0);
+        area += a;
+        
+        centroid.mX += (x0 + x1) * a;
+        centroid.mY += (y0 + y1) * a;
+    }
+    
+    //handle last, closing vertex
+    x0 = vertices[i].GetX();
+    y0 = vertices[i].GetY();
+    x1 = vertices[0].GetX();
+    y1 = vertices[0].GetY();
+    a = (x0*y1) - (x1*y0);
+    area += a;
+    
+    centroid.mX += (x0 + x1) * a;
+    centroid.mY += (y0 + y1) * a;
+    
+    //Finalize calculations
+    area *= 0.5;
+    centroid.mX /= (6.0f * area);
+    centroid.mY /= (6.0f * area);
+    
+    return centroid;
 }

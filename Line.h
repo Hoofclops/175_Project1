@@ -13,17 +13,17 @@
 class Line
 {
 private:
-    Point* mA;
-    Point* mB;
+    Point mA;
+    Point mB;
     
 public:
-    Line(Point *a, Point *b);
+    Line(Point a, Point b);
     
-    Point* GetPointA();
-    void SetPointA(Point* p);
+    Point GetPointA();
+    void SetPointA(Point p);
     
-    Point* GetPointB();
-    void SetPointB(Point* p);
+    Point GetPointB();
+    void SetPointB(Point p);
 };
 
 #endif /* defined(__Project1__Line__) */

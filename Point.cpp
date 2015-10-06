@@ -7,6 +7,7 @@
 //
 
 #include "Point.h"
+Point::Point(){}
 
 Point::Point(Vector2i pos)
 {
@@ -36,18 +37,24 @@ Vector2i Point::GetPos()
 {
     return mPos;
 }
-void Point::SetPos(Vector2i pos)
-{
-    mPos = pos;
-}
 
 int Point::GetX()
 {
     return mPos.mX;
 }
+void Point::SetX(int x)
+{
+    mPos.mX = x;
+    
+}
 int Point::GetY()
 {
     return mPos.mY;
+}
+void Point::SetY(int y)
+{
+    mPos.mY = y;
+    
 }
 
 Color Point::GetColor()

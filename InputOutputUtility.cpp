@@ -16,8 +16,8 @@ InputOutputUtility::InputOutputUtility(){}
 void InputOutputUtility::ParsePolygonFile()
 {
     ifstream fin;
-   fin.open("poly.txt");
-    // fin.open("//Users//BrandonHome//Desktop//175//Project1//Project1//poly.txt");
+//   fin.open("poly.txt");
+     fin.open("//Users//BrandonHome//Desktop//175//Project1//Project1//poly.txt");
     if (!fin.good())
         throw runtime_error("Error opening poly.txt");
     
@@ -49,7 +49,7 @@ void InputOutputUtility::ParsePolygonFile()
         //Parse strings
         if(strcmp(tokens[0], "End") == 0 || strcmp(tokens[0], "end") == 0)
         {
-            ObjectEditor::Instance()->CreatePolygon(vertexPositions);
+            ObjectEditor::Instance()->CreatePolygon(vertexPositions, true);
             vertexPositions.clear();
         }
         else

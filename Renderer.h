@@ -9,15 +9,15 @@
 #ifndef __Project1__Renderer__
 #define __Project1__Renderer__
 
-#define SCREEN_SIZE 800
+#define SCREEN_SIZE 1000
 #define CANVAS_RED 0
 #define CANVAS_GREEN 0
 #define CANVAS_BLUE 0
 
-// #include <OpenGL/gl.h>
-// #include <OpenGL/glu.h>
-// #include <GLUT/glut.h>
-#include <GL/glut.h>
+ #include <OpenGL/gl.h>
+ #include <OpenGL/glu.h>
+ #include <GLUT/glut.h>
+//#include <GL/glut.h>
 #include <iostream>
 #include "Vector2i.h"
 #include "Color.h"

@@ -50,6 +50,7 @@ public:
     static void LineDDA(Line line);
     static void LineBresenham(Line line);
     static void PolyScanLine(Polygon poly);
+    static Vector2i FindPolyCentroid(Polygon poly);
 };
 
 #endif /* defined(__Project1__GraphicsAlgorithm__) */
