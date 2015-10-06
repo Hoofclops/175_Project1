@@ -13,9 +13,12 @@ Vector2i Renderer::sScreenSize;
 float*  Renderer::sPixelBuffer;
 
 Renderer::Renderer()
+{}
+
+void Renderer::InitWindow(int xDim, int yDim)
 {
-    sScreenSize = Vector2i(SCREEN_SIZE, SCREEN_SIZE);
-    sPixelBuffer = new float[SCREEN_SIZE * SCREEN_SIZE * 3]; //Multiply by 3 for rgb, when changing this constant, be sure to change hard code in DrawPoint()
+    sScreenSize = Vector2i(xDim, yDim);
+    sPixelBuffer = new float[sScreenSize.mX * sScreenSize.mY * 3]; //Multiply by 3 for rgb, when changing this constant, be sure to change hard code in DrawPoint()
 }
 
 Vector2i Renderer::GetScreenSize()
@@ -34,7 +37,7 @@ void Renderer::DrawPoint(Point point)
     
     Color color = point.GetColor();
     
-    if(pixelStart >= 0 && pixelStart + 2 < SCREEN_SIZE * SCREEN_SIZE * 3)
+    if(pixelStart >= 0 && pixelStart + 2 < sScreenSize.mX * sScreenSize.mY * 3)
     {
         sPixelBuffer[pixelStart] = color.GetRed();
         sPixelBuffer[pixelStart + 1] = color.GetGreen();
@@ -83,24 +86,24 @@ void Renderer::DrawScene()
     ClearBuffer();
     deque<Polygon> polys = ObjectEditor::Instance()->GetPolygons();
 
-    cout << "Drawing Polygon" << endl;
-    for(int i = 0; i < polys.size(); i++)
-    {
-        
-        deque<Line> edges = polys[i].GetEdges();
-        for(int j = 0; j < edges.size(); j++)
-        {
-            cout << edges[j].GetPointA().GetX() << ", ";
-            cout << edges[j].GetPointA().GetY() << " --> ";
-            
-            cout << edges[j].GetPointB().GetX() << ", ";
-            cout << edges[j].GetPointB().GetY() << endl;;
-        }
-    }
-    
-    Vector2i centroid = GraphicsAlgorithm::FindPolyCentroid(polys[0]);
-    
-    cout << "Centroid: " << centroid.mX << " ," << centroid.mY << endl;
+//    cout << "Drawing Polygon" << endl;
+//    for(int i = 0; i < polys.size(); i++)
+//    {
+//        
+//        deque<Line> edges = polys[i].GetEdges();
+//        for(int j = 0; j < edges.size(); j++)
+//        {
+//            cout << edges[j].GetPointA().GetX() << ", ";
+//            cout << edges[j].GetPointA().GetY() << " --> ";
+//            
+//            cout << edges[j].GetPointB().GetX() << ", ";
+//            cout << edges[j].GetPointB().GetY() << endl;;
+//        }
+//    }
+//    
+//    Vector2i centroid = GraphicsAlgorithm::FindPolyCentroid(polys[0]);
+//    
+//    cout << "Centroid: " << centroid.mX << " ," << centroid.mY << endl;
 
     long n = polys.size();
     for(int i = 0; i < n; i++)
@@ -113,7 +116,7 @@ void Renderer::ClearBuffer()
 {
     //sPixelBuffer = new float[SCREEN_SIZE * SCREEN_SIZE * 3];
 
-    int n = SCREEN_SIZE * SCREEN_SIZE * 3;
+    int n = sScreenSize.mX * sScreenSize.mY * 3;
     for(int i = 0; i < n; i++)
     {
         sPixelBuffer[i] = 0.0f;

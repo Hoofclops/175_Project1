@@ -9,7 +9,6 @@
 #ifndef __Project1__Renderer__
 #define __Project1__Renderer__
 
-#define SCREEN_SIZE 1000
 #define CANVAS_RED 0
 #define CANVAS_GREEN 0
 #define CANVAS_BLUE 0
@@ -52,6 +51,8 @@ public:
             sInstance = new Renderer;
         return sInstance;
     }
+    
+    static void InitWindow(int xDim, int yDim);
     
     Vector2i GetScreenSize();
     static void SetScreenSize(Vector2i size);

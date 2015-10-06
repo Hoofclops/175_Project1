@@ -17,6 +17,7 @@
 #include <stdexcept>
 #include <deque>
 #include <string>
+#include <iostream>
 #include "Vector2i.h"
 #include "ObjectEditor.h"
 using namespace std;
@@ -37,7 +38,10 @@ public:
         return sInstance;
     }
     
+    static void QueryWindowSize();
     static void ParsePolygonFile();
+    
+    
     
 };
 

@@ -13,6 +13,18 @@ InputOutputUtility* InputOutputUtility::sInstance;
 
 InputOutputUtility::InputOutputUtility(){}
 
+void InputOutputUtility::QueryWindowSize()
+{
+    int xDim, yDim;
+    
+    cout << "Enter X window dimension: ";
+    cin >> xDim;
+    cout << "Enter Y window dimension: ";
+    cin >> yDim;
+    
+    Renderer::Instance()->InitWindow(xDim, yDim);
+}
+
 void InputOutputUtility::ParsePolygonFile()
 {
     ifstream fin;
