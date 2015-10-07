@@ -86,25 +86,6 @@ void Renderer::DrawScene()
     ClearBuffer();
     deque<Polygon> polys = ObjectEditor::Instance()->GetPolygons();
 
-//    cout << "Drawing Polygon" << endl;
-//    for(int i = 0; i < polys.size(); i++)
-//    {
-//        
-//        deque<Line> edges = polys[i].GetEdges();
-//        for(int j = 0; j < edges.size(); j++)
-//        {
-//            cout << edges[j].GetPointA().GetX() << ", ";
-//            cout << edges[j].GetPointA().GetY() << " --> ";
-//            
-//            cout << edges[j].GetPointB().GetX() << ", ";
-//            cout << edges[j].GetPointB().GetY() << endl;;
-//        }
-//    }
-//    
-//    Vector2i centroid = GraphicsAlgorithm::FindPolyCentroid(polys[0]);
-//    
-//    cout << "Centroid: " << centroid.mX << " ," << centroid.mY << endl;
-
     long n = polys.size();
     for(int i = 0; i < n; i++)
     {

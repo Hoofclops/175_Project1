@@ -8,41 +8,5 @@ Active polygon can also be set by setting the value in the menu that will be dis
 The menu will have the active polygon id, the xy dimensions of the viewport, and the scaling factor, translation vector (which will be drawn as well maybe) and the rotation angle
 The user will have to hit an apply button on the menu in order to apply any changes made to the text fields
 
-
-GlutKeyboardFunc for keyboard interactions
-for arrow keys you will need to use glutSpecialFunc(); Example:
-
-main()
-{
-glutSpecialFunc(SpecialInput);
-}
-
-void SpecialInput(int key, int x, int y)
-{
-switch(key)
-{
-case GLUT_KEY_UP:
-//do something here
-break;
-case GLUT_KEY_DOWN:
-//do something here
-break;
-case GLUT_KEY_LEFT:
-//do something here
-break;
-case GLUT_KEY_RIGHT:
-//do something here
-break;
-}
-
-glutPostRedisplay();
-}
-
-While main loop is running, idle func is what handles user input and updating display resolution etc
-
-figure out how different screen sizes are gonna work with different buffer sizes
-
-IMMEDIATE TODO:
-Write Data parser and serializer classes
-
-Need to change InputOutputUtility file path for unix system instead of full path needed in XCODE
+BUGS:
+When entering polygon command, excessive backspacing will cause invalid vertex format warning, just need to reenter string

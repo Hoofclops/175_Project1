@@ -28,7 +28,7 @@ private:
     static InputOutputUtility* sInstance;
     
     InputOutputUtility();
-    
+
 public:
     
     static InputOutputUtility* Instance()
@@ -39,10 +39,12 @@ public:
     }
     
     static void QueryWindowSize();
+    static void DetectInput(unsigned char key, int xmouse, int ymouse);
+    static void ProcessInput();
+    static void ProcessCommandPolygon(deque<string> tokens);
     static void ParsePolygonFile();
-    
-    
-    
+    static deque<string> SplitString(string s, string delims);
+
 };
 
 #endif /* defined(__Project1__InputOutputUtility__) */

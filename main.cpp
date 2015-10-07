@@ -24,8 +24,8 @@ int main(int argc, char *argv[])
     
     ///////////////////////////////////////
     //TEST CODE////////////////////////////
-    InputOutputUtility::Instance()->ParsePolygonFile();
-    ObjectEditor::Instance()->TranslatePolygon(0, Vector2i(50, 50), true);
+//    InputOutputUtility::Instance()->ParsePolygonFile();
+//    ObjectEditor::Instance()->TranslatePolygon(0, Vector2i(50, 50), true);
 //    ObjectEditor::Instance()->ScalePolygon(0,3.0f, 3.0f, true);
 //    ObjectEditor::Instance()->RotatePolygon(0, 10, true);
     //END TEST/////////////////////////////
@@ -40,8 +40,7 @@ int main(int argc, char *argv[])
     glutCreateWindow("Project 1");
     glClearColor(0, 0, 0, 0); //clears the buffer of OpenGL
     glutDisplayFunc(Renderer::DisplayPixelBuffer);
-    
-//    glutIdleFunc(Renderer::DisplayPixelBuffer);
+    glutKeyboardFunc(InputOutputUtility::DetectInput);
     
     glutMainLoop();//main display loop, will display until terminate
     
