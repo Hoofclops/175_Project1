@@ -211,10 +211,11 @@ void GraphicsAlgorithm::FillRemainingEdges(deque<Line> edges, list<ScanData> * r
         {
             //valid, non horiontal line, find where to insert
             list<ScanData>::iterator iter = remainingEdges->begin();
-            for(unsigned int i = 0; i < edges.size(); i++)
+            for(unsigned int i = 0; i <= edges.size(); i++)
             {
+                
                 //When we've reached end of list
-                if(i == remainingEdges->size())
+                if(i == remainingEdges->size() || i == edges.size())
                 {
                     remainingEdges->insert(iter, data);
                     break;
@@ -292,7 +293,8 @@ void GraphicsAlgorithm::DrawScanLine(int curY, list<ScanData> activeEdges, bool 
             if(!parity)
             {
                 Point p = Point(curX, curY, color);
-                Renderer::Instance()->DrawPoint(p);            }
+                Renderer::Instance()->DrawPoint(p);
+            }
         }
         
         curX++;
