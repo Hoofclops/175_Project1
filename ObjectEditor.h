@@ -12,6 +12,7 @@
 #include <deque>
 #include <math.h>
 #include "Polygon.h"
+#include "Line.h"
 #include "Renderer.h"
 
 class ObjectEditor
@@ -19,6 +20,7 @@ class ObjectEditor
 private:
     static ObjectEditor* sInstance;
     static deque<Polygon> sPolyList;
+    static deque<Line> sLineList;
     static int sSelectedPoly;
     
     ObjectEditor();
@@ -31,16 +33,18 @@ public:
     }
     
     static void CreatePolygon(deque<Vector2i> vertPositions, bool drawScene);
+    static void CreateLine(Line line, bool drawScene);
     
     static void TranslatePolygon(Vector2i translationVector, bool drawScene);
     static void ScalePolygon(float scaleX, float scaleY, bool drawScene);
     static void RotatePolygon(double degrees, bool drawScene);
 
     static deque<Polygon> GetPolygons();
+    static deque<Line> GetLines();
         
     static void CycleSelectedPoly(bool forward);
     
-    static void ClearPolygons();
+    static void ClearData();
 };
 
 

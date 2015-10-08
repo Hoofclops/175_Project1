@@ -1,8 +1,2 @@
-makefile:
-all: project1
-
-project1: project1.o
-	g++ -lglut -lGL -Wall Color.cpp Line.cpp Vector2i.cpp Polygon.cpp GraphicsAlgorithm.cpp Vector3.cpp ObjectEditor.cpp Renderer.cpp InputOutputUtility.cpp main.cpp Point.cpp -o project1.o
-	
-clean:
-	-rm project1.o
+all:
+	g++ -std=c++11 -Wall -lglut -lGL Color.cpp GraphicsAlgorithm.cpp InputOutputUtility.cpp Line.cpp main.cpp ObjectEditor.cpp Point.cpp Polygon.cpp Vector2i.cpp Vector3.cpp Renderer.cpp

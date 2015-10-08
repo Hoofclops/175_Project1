@@ -101,11 +101,30 @@ void Renderer::DrawScene()
 {
     ClearBuffer();
     deque<Polygon> polys = ObjectEditor::Instance()->GetPolygons();
+    deque<Line> lines = ObjectEditor::Instance()->GetLines();
 
     long n = polys.size();
     for(int i = 0; i < n; i++)
     {
         DrawPolygon(polys[i]);
+    }
+    
+    n = lines.size();
+    for(int i = 0; i < n; i++)
+    {
+        Line l = lines[i];
+        if(l.GetAlgorithm() == "Bresenham")
+        {
+            GraphicsAlgorithm::LineBresenham(l);
+        }
+        else if(l.GetAlgorithm() == "DDA")
+        {
+            GraphicsAlgorithm::LineDDA(l);
+        }
+        else
+        {
+            throw invalid_argument("Line has no algorithm");
+        }
     }
 }
 

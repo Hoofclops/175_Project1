@@ -10,6 +10,7 @@
 
 ObjectEditor* ObjectEditor::sInstance;
 deque<Polygon> ObjectEditor::sPolyList;
+deque<Line> ObjectEditor::sLineList;
 int ObjectEditor::sSelectedPoly;
 
 ObjectEditor::ObjectEditor()
@@ -21,6 +22,13 @@ void ObjectEditor::CreatePolygon(deque<Vector2i> vertPositions, bool drawScene)
 {
     Polygon poly = Polygon(vertPositions);
     sPolyList.push_back(poly);
+    if(drawScene)
+        Renderer::Instance()->DrawScene();
+}
+
+void ObjectEditor::CreateLine(Line line, bool drawScene)
+{
+    sLineList.push_back(line);
     if(drawScene)
         Renderer::Instance()->DrawScene();
 }
@@ -66,9 +74,6 @@ void ObjectEditor::ScalePolygon(float scaleX, float scaleY, bool drawScene)
     }
     
     Vector2i centroid = GraphicsAlgorithm::FindPolyCentroid(sPolyList[sSelectedPoly]);
-    
-    cout << "Centroid: " << centroid.mX << " ," << centroid.mY << endl;
-    
     deque<Point> vertices = sPolyList[sSelectedPoly].GetVertices();
     
     long n = vertices.size();
@@ -116,8 +121,6 @@ void ObjectEditor::RotatePolygon(double degrees, bool drawScene)
         
         vertices[i].SetX(x);
         vertices[i].SetY(y);
-        
-        cout << "vertex: " << x << ", " << y << endl;
     }
     sPolyList[sSelectedPoly].SetVertices(vertices);
     
@@ -129,6 +132,12 @@ deque<Polygon> ObjectEditor::GetPolygons()
 {
     return sPolyList;
 }
+
+deque<Line> ObjectEditor::GetLines()
+{
+    return sLineList;
+}
+
 
 void ObjectEditor::CycleSelectedPoly(bool forward)
 {
@@ -172,9 +181,10 @@ void ObjectEditor::CycleSelectedPoly(bool forward)
     Renderer::DrawScene();
 }
 
-void ObjectEditor::ClearPolygons()
+void ObjectEditor::ClearData()
 {
     sPolyList.clear();
+    sLineList.clear();
     sSelectedPoly = -1;
 }
 

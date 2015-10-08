@@ -96,7 +96,7 @@ void InputOutputUtility::ProcessInput()
     else if(command == "Clear" || command == "clear")
     {
         Renderer::Instance()->ClearBuffer();
-        ObjectEditor::Instance()->ClearPolygons();
+        ObjectEditor::Instance()->ClearData();
     }
     else
     {
@@ -124,21 +124,17 @@ void InputOutputUtility::ProcessCommandLine(deque<string> tokens)
     
     deque<Vector2i> vertexPositions = ExtractVertices(tokens);
     
-    if(vertexPositions.size() != 2)
+    if(vertexPositions.size() != 2 ||
+       (algo != "Bresenham" &&
+        algo != "DDA"))
     {
         cout << "Invalid command" << endl;
         return;
     }
     
     Line line = Line(Point(vertexPositions[0].mX, vertexPositions[0].mY), Point(vertexPositions[1].mX, vertexPositions[1].mY));
-    
-    if(algo == "Bresenham")
-        GraphicsAlgorithm::LineBresenham(line);
-    else if(algo == "DDA")
-        GraphicsAlgorithm::LineDDA(line);
-    else
-        cout << "Invalid command" << endl;
-
+    line.SetAlgorithm(algo);
+    ObjectEditor::Instance()->CreateLine(line, true);
 }
 
 void InputOutputUtility::ProcessCommandTranslate(deque<string> tokens)

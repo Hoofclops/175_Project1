@@ -10,11 +10,14 @@
 #define __Project1__Line__
 
 #include "Point.h"
+#include <string>
+
 class Line
 {
 private:
     Point mA;
     Point mB;
+    string mLineAlgorithm;
     
 public:
     Line(Point a, Point b);
@@ -24,6 +27,9 @@ public:
     
     Point GetPointB();
     void SetPointB(Point p);
+    
+    string GetAlgorithm();
+    void SetAlgorithm(string algo);
 };
 
 #endif /* defined(__Project1__Line__) */
