@@ -63,14 +63,30 @@ void Renderer::DrawLine(Line line, Algo algo)
 
 void Renderer::DrawPolygon(Polygon poly)
 {
-    GraphicsAlgorithm::PolyScanLine(poly);
+    
+    if(poly.IsSelected())
+    {
+        GraphicsAlgorithm::PolyScanLine(poly, true);
+    }
+    else
+    {
+        GraphicsAlgorithm::PolyScanLine(poly);
+    }
+    
     
     deque<Line> edges = poly.GetEdges();
     //draw just the edges to cover top and right edges that weren't drawn by scan line
     long edgesCount = edges.size();
     for(int i = 0; i < edgesCount; i++)
     {
-        GraphicsAlgorithm::LineDDA(edges[i]);
+        if(poly.IsSelected())
+        {
+            GraphicsAlgorithm::LineDDA(edges[i], true);
+        }
+        else
+        {
+            GraphicsAlgorithm::LineDDA(edges[i]);
+        }
     }
 }
 

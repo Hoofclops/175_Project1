@@ -22,6 +22,7 @@ private:
     //deque to maintain stable references between edges and vertices
     deque<Point> mVertices;
     deque<Line> mEdges;
+    bool mSelected;
     
 public:
     Polygon();
@@ -32,5 +33,8 @@ public:
     void SetVertices(deque<Point> verts);
 
     deque<Line> GetEdges();
+    
+    void SetSelected(bool isSelected);
+    bool IsSelected();
 };
 #endif /* defined(__Project1__Polygon__) */

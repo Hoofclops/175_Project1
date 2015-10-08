@@ -13,6 +13,7 @@
 #include <deque>
 #include <list>
 #include "Point.h"
+#include "Color.h"
 #include "Line.h"
 #include "Renderer.h"
 #include "Polygon.h"
@@ -45,11 +46,11 @@ private:
     static bool InitScanLineValues(Line line, ScanData* data);
     static void FillRemainingEdges(deque<Line> edges, list<ScanData> * remainingEdges);
     static bool SortActiveEdges(const ScanData first, const ScanData second);
-    static void DrawScanLine(int curY, list<ScanData> activeEdges);
+    static void DrawScanLine(int curY, list<ScanData> activeEdges, bool drawGreen);
 public:
-    static void LineDDA(Line line);
+    static void LineDDA(Line line, bool drawGreen = false);
     static void LineBresenham(Line line);
-    static void PolyScanLine(Polygon poly);
+    static void PolyScanLine(Polygon poly, bool drawGreen = false);
     static Vector2i FindPolyCentroid(Polygon poly);
 };
 

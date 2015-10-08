@@ -58,3 +58,13 @@ deque<Line> Polygon::GetEdges()
     
     return mEdges;
 }
+
+void Polygon::SetSelected(bool isSelected)
+{
+    mSelected = isSelected;
+}
+
+bool Polygon::IsSelected()
+{
+    return mSelected;
+}

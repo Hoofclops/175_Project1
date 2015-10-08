@@ -32,6 +32,13 @@ void InputOutputUtility::DetectInput(unsigned char key, int xmouse, int ymouse)
     {
             case 'i':
                 ProcessInput();
+            break;
+            case 'n':
+                ObjectEditor::CycleSelectedPoly(true);
+            break;
+            case 'b':
+                ObjectEditor::CycleSelectedPoly(false);
+            break;
     }
     
     glutPostRedisplay();
@@ -41,10 +48,7 @@ void InputOutputUtility::ProcessInput()
 {
     string input;
     cout << "Enter command: ";
-    
     getline(cin, input);
-//    input = "Polygon (0,0) (100,100) (100,0)";
-//    cout << endl << input << endl;
     
     deque<string> tokens = SplitString(input, string(" "));
     string command = tokens[0];

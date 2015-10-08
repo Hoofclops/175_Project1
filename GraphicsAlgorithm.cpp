@@ -247,8 +247,15 @@ bool GraphicsAlgorithm::SortActiveEdges(const ScanData first, const ScanData sec
     return first.xVal < second.xVal;
 }
 
-void GraphicsAlgorithm::DrawScanLine(int curY, list<ScanData> activeEdges)
+void GraphicsAlgorithm::DrawScanLine(int curY, list<ScanData> activeEdges, bool drawGreen)
 {
+    Color color = Color(1,1,1);
+    if(drawGreen)
+    {
+        color = Color(0.24f,.9,0.24f);
+    }
+
+    
     int curX = activeEdges.front().xVal;
     long totIntersections = activeEdges.size();
     int curIntersections = 0;
@@ -273,7 +280,8 @@ void GraphicsAlgorithm::DrawScanLine(int curY, list<ScanData> activeEdges)
             
             if(!parity)
             {
-                Renderer::Instance()->DrawPoint(Point(curX, curY));
+                Point p = Point(curX, curY, color);
+                Renderer::Instance()->DrawPoint(p);
             }
             
             curIntersections++;
@@ -283,8 +291,8 @@ void GraphicsAlgorithm::DrawScanLine(int curY, list<ScanData> activeEdges)
         {
             if(!parity)
             {
-                Renderer::Instance()->DrawPoint(Point(curX, curY));
-            }
+                Point p = Point(curX, curY, color);
+                Renderer::Instance()->DrawPoint(p);            }
         }
         
         curX++;
@@ -295,8 +303,14 @@ void GraphicsAlgorithm::DrawScanLine(int curY, list<ScanData> activeEdges)
  *ALGORITHM IMPLEMENTATION*
  **************************/
 
-void GraphicsAlgorithm::LineDDA(Line line)
+void GraphicsAlgorithm::LineDDA(Line line, bool drawGreen)
 {
+    Color color = Color(1,1,1);
+    if(drawGreen)
+    {
+        color = Color(0.24f,.9,0.24f);
+    }
+    
     Renderer *renderer = Renderer::Instance();
     Point a = line.GetPointA(), b = line.GetPointB();
     
@@ -319,7 +333,8 @@ void GraphicsAlgorithm::LineDDA(Line line)
     yIncrement = (float)dy / (float)steps;
     
     //draw first point
-    renderer->DrawPoint(Point(nearbyint(x), nearbyint(y)));
+    Point p = Point(nearbyint(x), nearbyint(y), color);
+    renderer->DrawPoint(p);
     
     //draw each subsequent point, incrementing along the way
     for(int i = 0; i < steps; i++)
@@ -327,7 +342,8 @@ void GraphicsAlgorithm::LineDDA(Line line)
         x += xIncrement;
         y += yIncrement;
         
-        renderer->DrawPoint(Point(nearbyint(x), nearbyint(y)));
+        p = Point(nearbyint(x), nearbyint(y), color);
+        renderer->DrawPoint(p);
     }
 }
 
@@ -364,7 +380,7 @@ void GraphicsAlgorithm::LineBresenham(Line line)
     }
 }
 
-void GraphicsAlgorithm::PolyScanLine(Polygon poly)
+void GraphicsAlgorithm::PolyScanLine(Polygon poly, bool drawGreen)
 {
     list<ScanData> remainingEdges;
     list<ScanData> activeEdges;
@@ -393,7 +409,7 @@ void GraphicsAlgorithm::PolyScanLine(Polygon poly)
         activeEdges.sort(SortActiveEdges);
         
         //Draw Scan Line
-        DrawScanLine(curY, activeEdges);
+        DrawScanLine(curY, activeEdges, drawGreen);
         
         //increment Y
         curY++;

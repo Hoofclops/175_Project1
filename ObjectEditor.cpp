@@ -10,8 +10,12 @@
 
 ObjectEditor* ObjectEditor::sInstance;
 deque<Polygon> ObjectEditor::sPolyList;
+int ObjectEditor::sSelectedPoly;
 
-ObjectEditor::ObjectEditor(){}
+ObjectEditor::ObjectEditor()
+{
+    sSelectedPoly = -1;
+}
 
 void ObjectEditor::CreatePolygon(deque<Vector2i> vertPositions, bool drawScene)
 {
@@ -111,3 +115,47 @@ deque<Polygon> ObjectEditor::GetPolygons()
 {
     return sPolyList;
 }
+
+void ObjectEditor::CycleSelectedPoly(bool forward)
+{
+    //Handle first selection
+    if(sSelectedPoly == -1)
+    {
+        sSelectedPoly = 0;
+        sPolyList[sSelectedPoly].SetSelected(true);
+        Renderer::DrawScene();
+        return;
+    }
+    
+    if(forward)
+    {
+        sPolyList[sSelectedPoly].SetSelected(false);
+        if(sSelectedPoly != sPolyList.size() - 1)
+        {
+            sSelectedPoly++;
+        }
+        else
+        {
+            sSelectedPoly = 0;
+        }
+        sPolyList[sSelectedPoly].SetSelected(true);
+    }
+    else
+    {
+        sPolyList[sSelectedPoly].SetSelected(false);
+        if(sSelectedPoly != 0)
+        {
+            sSelectedPoly--;
+        }
+        else
+        {
+            sSelectedPoly = (int)(sPolyList.size() - 1);
+        }
+        sPolyList[sSelectedPoly].SetSelected(true);
+
+    }
+    
+    Renderer::DrawScene();
+}
+
+

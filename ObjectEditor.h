@@ -19,7 +19,7 @@ class ObjectEditor
 private:
     static ObjectEditor* sInstance;
     static deque<Polygon> sPolyList;
-    static int sCurrentID;
+    static int sSelectedPoly;
     
     ObjectEditor();
 public:
@@ -36,8 +36,9 @@ public:
     static void ScalePolygon(int polygonID, float scaleX, float scaleY, bool drawScene);
     static void RotatePolygon(int polygonID, float degrees, bool drawScene);
 
-    deque<Polygon> GetPolygons();
-    
+    static deque<Polygon> GetPolygons();
+        
+    static void CycleSelectedPoly(bool forward);
 };
 
 
