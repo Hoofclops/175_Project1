@@ -437,7 +437,7 @@ void GraphicsAlgorithm::PolyScanLine(Polygon poly, bool drawGreen)
         }
         
         //check for finish condition
-        if(activeEdges.size() == 0)
+        if(activeEdges.size() == 0 && remainingEdges.size() == 0)
         {
             break;
         }
