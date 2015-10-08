@@ -34,10 +34,10 @@ void InputOutputUtility::DetectInput(unsigned char key, int xmouse, int ymouse)
                 ProcessInput();
             break;
             case 'n':
-                ObjectEditor::CycleSelectedPoly(true);
+                ObjectEditor::Instance()->CycleSelectedPoly(true);
             break;
             case 'b':
-                ObjectEditor::CycleSelectedPoly(false);
+                ObjectEditor::Instance()->CycleSelectedPoly(false);
             break;
     }
     

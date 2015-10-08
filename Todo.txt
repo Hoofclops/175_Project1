@@ -1,15 +1,3 @@
-UI:
-Left and Right arrows will cycle through available polygons, selected polygon will display its lines in green
-holding s or perhaps toggling s will set the program into scale mode, then left and right will scale the selected polygon up or down
-the same will go for r with rotation and t for translation
-
-Active polygon can also be set by setting the value in the menu that will be displayed as well
-
-The menu will have the active polygon id, the xy dimensions of the viewport, and the scaling factor, translation vector (which will be drawn as well maybe) and the rotation angle
-The user will have to hit an apply button on the menu in order to apply any changes made to the text fields
-
 BUGS:
 When entering polygon command, excessive backspacing will cause invalid vertex format warning, just need to reenter string
-
-Drawing certain triangles bugs out scan line algorithm (20,20) (10,10) (15,10) for example, only one line detected as intersected for some reason
-other cases that break are (200,200) (150,100) (200,150)
+Rotate and scaling lines seg faults, dont do it please!

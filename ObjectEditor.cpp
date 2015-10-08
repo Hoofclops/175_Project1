@@ -144,6 +144,9 @@ void ObjectEditor::CycleSelectedPoly(bool forward)
     //Handle first selection
     if(sSelectedPoly == -1)
     {
+        if(sPolyList.size() == 0)
+            return;
+        
         sSelectedPoly = 0;
         sPolyList[sSelectedPoly].SetSelected(true);
         Renderer::DrawScene();
@@ -153,7 +156,8 @@ void ObjectEditor::CycleSelectedPoly(bool forward)
     if(forward)
     {
         sPolyList[sSelectedPoly].SetSelected(false);
-        if(sSelectedPoly != sPolyList.size() - 1)
+        unsigned int selectedUnsigned = sSelectedPoly;
+        if(selectedUnsigned != sPolyList.size() - 1)
         {
             sSelectedPoly++;
         }

@@ -63,6 +63,18 @@ void Renderer::DrawLine(Line line, Algo algo)
 
 void Renderer::DrawPolygon(Polygon poly)
 {
+    //If polygon has 2 vertices, use line drawing
+    deque<Point> vertices = poly.GetVertices();
+    if(vertices.size() == 2)
+    {
+        
+        if(poly.IsSelected())
+            GraphicsAlgorithm::LineDDA(Line(vertices[0], vertices[1]), true);
+        else
+            GraphicsAlgorithm::LineDDA(Line(vertices[0], vertices[1]));
+        return;
+    }
+    
     
     if(poly.IsSelected())
     {
