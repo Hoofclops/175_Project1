@@ -85,13 +85,11 @@ void InputOutputUtility::ProcessInput()
     {
         ProcessCommandClip(tokens);
     }
-    else if(command == "ReadFile" || command == "readfile" ||
-            command == "Readfile" || command == "readFile")
+    else if(command == "Load" || command == "load")
     {
-        ProcessCommandReadFile(tokens);
+        ProcessCommandLoadFile(tokens);
     }
-    else if(command == "SaveFile" || command == "savefile" ||
-            command == "Savefile" || command == "saveFile")
+    else if(command == "Save" || command == "save")
     {
         ProcessCommandSaveFile(tokens);
     }
@@ -183,16 +181,33 @@ void InputOutputUtility::ProcessCommandRotate(deque<string> tokens)
 }
 void InputOutputUtility::ProcessCommandClip(deque<string> tokens)
 {}
-void InputOutputUtility::ProcessCommandReadFile(deque<string> tokens)
-{}
-void InputOutputUtility::ProcessCommandSaveFile(deque<string> tokens)
-{}
+void InputOutputUtility::ProcessCommandLoadFile(deque<string> tokens)
+{
+    if(tokens.size() != 1)
+    {
+        cout << "Invalid command" << endl;
+        return;
+    }
+    
+    ParsePolygonFile(tokens[0]);
+}
 
-void InputOutputUtility::ParsePolygonFile()
+void InputOutputUtility::ProcessCommandSaveFile(deque<string> tokens)
+{
+    if(tokens.size() != 1)
+    {
+        cout << "Invalid command" << endl;
+        return;
+    }
+    
+    SavePolygonFile(tokens[0]);
+}
+
+void InputOutputUtility::ParsePolygonFile(string fileName)
 {
     ifstream fin;
-//   fin.open("poly.txt");
-     fin.open("//Users//BrandonHome//Desktop//175//Project1//Project1//poly.txt");
+//   fin.open(fileName);
+     fin.open("//Users//BrandonHome//Desktop//175//Project1//Project1//" + fileName);
     if (!fin.good())
         throw runtime_error("Error opening poly.txt");
     
@@ -234,6 +249,32 @@ void InputOutputUtility::ParsePolygonFile()
             vertexPositions.push_back(Vector2i(x, y));
         }
     }
+    
+    fin.close();
+}
+
+void InputOutputUtility::SavePolygonFile(string fileName)
+{
+    ofstream fout;
+//    fout.open(fileName, ofstream::out | ofstream::trunc);
+    fout.open("//Users//BrandonHome//Desktop//175//Project1//Project1//" + fileName, ofstream::out | ofstream::trunc);
+    
+    deque<Polygon> allPolys = ObjectEditor::Instance()->GetPolygons();
+    
+    long polyCount = allPolys.size();
+    for(unsigned int i = 0; i < polyCount; i++)
+    {
+        deque<Point> vertices = allPolys[i].GetVertices();
+        
+        long vertexCount = vertices.size();
+        for(unsigned int j = 0; j < vertexCount; j++)
+        {
+            fout << vertices[j].GetX() << "," << vertices[j].GetY() << "\n";
+        }
+        fout << "End" << "\n" << "\n";
+    }
+    
+    fout.close();
 }
 
 deque<string> InputOutputUtility::SplitString(string s, string delims)
