@@ -171,7 +171,15 @@ void InputOutputUtility::ProcessCommandScale(deque<string> tokens)
 }
 void InputOutputUtility::ProcessCommandRotate(deque<string> tokens)
 {
-
+    if(tokens.size() != 1)
+    {
+        cout << "Invalid command" << endl;
+        return;
+    }
+    
+    double degrees = stod(tokens[0]);
+    
+    ObjectEditor::Instance()->RotatePolygon(degrees, true);
 }
 void InputOutputUtility::ProcessCommandClip(deque<string> tokens)
 {}

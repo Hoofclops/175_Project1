@@ -25,6 +25,8 @@ Polygon::Polygon(deque<Vector2i> vertPositions)
         Point p = Point(vertPositions[i]);
         mVertices.push_back(p);
     }
+    
+    mSelected = false;
 }
 
 deque<Point> Polygon::GetVertices()

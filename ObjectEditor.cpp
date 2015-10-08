@@ -27,6 +27,9 @@ void ObjectEditor::CreatePolygon(deque<Vector2i> vertPositions, bool drawScene)
 
 void ObjectEditor::TranslatePolygon(Vector2i translationVector, bool drawScene)
 {
+    if(sSelectedPoly == -1)
+        CycleSelectedPoly(true);
+    
     unsigned int id = sSelectedPoly;
     if(id >= sPolyList.size())
     {
@@ -53,6 +56,9 @@ void ObjectEditor::TranslatePolygon(Vector2i translationVector, bool drawScene)
 
 void ObjectEditor::ScalePolygon(float scaleX, float scaleY, bool drawScene)
 {
+    if(sSelectedPoly == -1)
+        CycleSelectedPoly(true);
+    
     unsigned int id = sSelectedPoly;
     if(id >= sPolyList.size())
     {
@@ -81,8 +87,11 @@ void ObjectEditor::ScalePolygon(float scaleX, float scaleY, bool drawScene)
         Renderer::Instance()->DrawScene();
 }
 
-void ObjectEditor::RotatePolygon(float degrees, bool drawScene)
+void ObjectEditor::RotatePolygon(double degrees, bool drawScene)
 {
+    if(sSelectedPoly == -1)
+        CycleSelectedPoly(true);
+    
     unsigned int id = sSelectedPoly;
     if(id >= sPolyList.size())
     {
@@ -91,25 +100,30 @@ void ObjectEditor::RotatePolygon(float degrees, bool drawScene)
     
     Vector2i centroid = GraphicsAlgorithm::FindPolyCentroid(sPolyList[sSelectedPoly]);
     deque<Point> vertices = sPolyList[sSelectedPoly].GetVertices();
-    float theta = degrees * (M_PI / 180);
-    cout << "Theta: " << theta << endl;
+    double theta = degrees * (M_PI / 180);
     
     long n = vertices.size();
     for(int i = 0; i < n; i++)
     {
         int x = vertices[i].GetX(), y = vertices[i].GetY();
-        x = centroid.mX + (x - centroid.mX) * cos(theta) - (y - centroid.mY) * sin(theta);
-        y = centroid.mY + (x - centroid.mX) * sin(theta) + (y - centroid.mY) * cos(theta);
+        double cosAngle = cos(theta);
+        double sinAngle = sin(theta);
+        double dx = x - centroid.mX;
+        double dy = y - centroid.mY;
+        
+        x = centroid.mX + (int)(dx * cosAngle - dy * sinAngle);
+        y = centroid.mY + (int)(dx * sinAngle + dy * cosAngle);
         
         vertices[i].SetX(x);
         vertices[i].SetY(y);
+        
+        cout << "vertex: " << x << ", " << y << endl;
     }
     sPolyList[sSelectedPoly].SetVertices(vertices);
     
     if(drawScene)
         Renderer::Instance()->DrawScene();
 }
-
 
 deque<Polygon> ObjectEditor::GetPolygons()
 {

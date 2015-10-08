@@ -34,7 +34,7 @@ public:
     
     static void TranslatePolygon(Vector2i translationVector, bool drawScene);
     static void ScalePolygon(float scaleX, float scaleY, bool drawScene);
-    static void RotatePolygon(float degrees, bool drawScene);
+    static void RotatePolygon(double degrees, bool drawScene);
 
     static deque<Polygon> GetPolygons();
         
