@@ -10,3 +10,6 @@ The user will have to hit an apply button on the menu in order to apply any chan
 
 BUGS:
 When entering polygon command, excessive backspacing will cause invalid vertex format warning, just need to reenter string
+
+Drawing certain triangles bugs out scan line algorithm (20,20) (10,10) (15,10) for example, only one line detected as intersected for some reason
+other cases that break are (200,200) (150,100) (200,150)

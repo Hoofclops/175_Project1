@@ -32,13 +32,15 @@ public:
     
     static void CreatePolygon(deque<Vector2i> vertPositions, bool drawScene);
     
-    static void TranslatePolygon(int polygonID, Vector2i translationVector, bool drawScene);
-    static void ScalePolygon(int polygonID, float scaleX, float scaleY, bool drawScene);
-    static void RotatePolygon(int polygonID, float degrees, bool drawScene);
+    static void TranslatePolygon(Vector2i translationVector, bool drawScene);
+    static void ScalePolygon(float scaleX, float scaleY, bool drawScene);
+    static void RotatePolygon(float degrees, bool drawScene);
 
     static deque<Polygon> GetPolygons();
         
     static void CycleSelectedPoly(bool forward);
+    
+    static void ClearPolygons();
 };
 
 

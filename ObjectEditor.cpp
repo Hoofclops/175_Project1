@@ -25,15 +25,15 @@ void ObjectEditor::CreatePolygon(deque<Vector2i> vertPositions, bool drawScene)
         Renderer::Instance()->DrawScene();
 }
 
-void ObjectEditor::TranslatePolygon(int polygonID, Vector2i translationVector, bool drawScene)
+void ObjectEditor::TranslatePolygon(Vector2i translationVector, bool drawScene)
 {
-    unsigned int id = polygonID;
+    unsigned int id = sSelectedPoly;
     if(id >= sPolyList.size())
     {
         throw invalid_argument("Invalid Polygon ID");
     }
        
-    deque<Point> vertices = sPolyList[polygonID].GetVertices();
+    deque<Point> vertices = sPolyList[sSelectedPoly].GetVertices();
     
     long n = vertices.size();
     for(int i = 0; i < n; i++)
@@ -45,25 +45,25 @@ void ObjectEditor::TranslatePolygon(int polygonID, Vector2i translationVector, b
         vertices[i].SetX(x);
         vertices[i].SetY(y);
     }
-    sPolyList[polygonID].SetVertices(vertices);
+    sPolyList[sSelectedPoly].SetVertices(vertices);
     
     if(drawScene)
         Renderer::Instance()->DrawScene();
 }
 
-void ObjectEditor::ScalePolygon(int polygonID, float scaleX, float scaleY, bool drawScene)
+void ObjectEditor::ScalePolygon(float scaleX, float scaleY, bool drawScene)
 {
-    unsigned int id = polygonID;
+    unsigned int id = sSelectedPoly;
     if(id >= sPolyList.size())
     {
         throw invalid_argument("Invalid Polygon ID");
     }
     
-    Vector2i centroid = GraphicsAlgorithm::FindPolyCentroid(sPolyList[polygonID]);
+    Vector2i centroid = GraphicsAlgorithm::FindPolyCentroid(sPolyList[sSelectedPoly]);
     
     cout << "Centroid: " << centroid.mX << " ," << centroid.mY << endl;
     
-    deque<Point> vertices = sPolyList[polygonID].GetVertices();
+    deque<Point> vertices = sPolyList[sSelectedPoly].GetVertices();
     
     long n = vertices.size();
     for(int i = 0; i < n; i++)
@@ -75,22 +75,22 @@ void ObjectEditor::ScalePolygon(int polygonID, float scaleX, float scaleY, bool 
         vertices[i].SetX(x);
         vertices[i].SetY(y);
     }
-    sPolyList[polygonID].SetVertices(vertices);
+    sPolyList[sSelectedPoly].SetVertices(vertices);
     
     if(drawScene)
         Renderer::Instance()->DrawScene();
 }
 
-void ObjectEditor::RotatePolygon(int polygonID, float degrees, bool drawScene)
+void ObjectEditor::RotatePolygon(float degrees, bool drawScene)
 {
-    unsigned int id = polygonID;
+    unsigned int id = sSelectedPoly;
     if(id >= sPolyList.size())
     {
         throw invalid_argument("Invalid Polygon ID");
     }
     
-    Vector2i centroid = GraphicsAlgorithm::FindPolyCentroid(sPolyList[polygonID]);
-    deque<Point> vertices = sPolyList[polygonID].GetVertices();
+    Vector2i centroid = GraphicsAlgorithm::FindPolyCentroid(sPolyList[sSelectedPoly]);
+    deque<Point> vertices = sPolyList[sSelectedPoly].GetVertices();
     float theta = degrees * (M_PI / 180);
     cout << "Theta: " << theta << endl;
     
@@ -104,7 +104,7 @@ void ObjectEditor::RotatePolygon(int polygonID, float degrees, bool drawScene)
         vertices[i].SetX(x);
         vertices[i].SetY(y);
     }
-    sPolyList[polygonID].SetVertices(vertices);
+    sPolyList[sSelectedPoly].SetVertices(vertices);
     
     if(drawScene)
         Renderer::Instance()->DrawScene();
@@ -156,6 +156,12 @@ void ObjectEditor::CycleSelectedPoly(bool forward)
     }
     
     Renderer::DrawScene();
+}
+
+void ObjectEditor::ClearPolygons()
+{
+    sPolyList.clear();
+    sSelectedPoly = -1;
 }
 
 

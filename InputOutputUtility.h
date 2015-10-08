@@ -28,7 +28,22 @@ private:
     static InputOutputUtility* sInstance;
     
     InputOutputUtility();
-
+    
+    static void ProcessInput();
+    
+    //commands
+    static void ProcessCommandPolygon(deque<string> tokens);
+    static void ProcessCommandLine(deque<string> tokens);
+    static void ProcessCommandTranslate(deque<string> tokens);
+    static void ProcessCommandScale(deque<string> tokens);
+    static void ProcessCommandRotate(deque<string> tokens);
+    static void ProcessCommandClip(deque<string> tokens);
+    static void ProcessCommandReadFile(deque<string> tokens);
+    static void ProcessCommandSaveFile(deque<string> tokens);
+    
+    static deque<string> SplitString(string s, string delims);
+    static deque<Vector2i> ExtractVertices(deque<string> tokens);
+    
 public:
     
     static InputOutputUtility* Instance()
@@ -40,10 +55,7 @@ public:
     
     static void QueryWindowSize();
     static void DetectInput(unsigned char key, int xmouse, int ymouse);
-    static void ProcessInput();
-    static void ProcessCommandPolygon(deque<string> tokens);
     static void ParsePolygonFile();
-    static deque<string> SplitString(string s, string delims);
 
 };
 

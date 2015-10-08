@@ -51,73 +51,134 @@ void InputOutputUtility::ProcessInput()
     getline(cin, input);
     
     deque<string> tokens = SplitString(input, string(" "));
+    
+    if(tokens.size() == 0)
+    {
+        return;
+    }
+    
     string command = tokens[0];
     tokens.pop_front();
     
     //Parse strings
-    if(command == "Polygon")
+    if(command == "Polygon" || command == "polygon")
     {
         ProcessCommandPolygon(tokens);
     }
-    else if(command == "Line")
+    else if(command == "Line" || command == "line")
     {
-    
+        ProcessCommandLine(tokens);
     }
-    else if(command == "Transform")
+    else if(command == "Translate" || command == "translate")
     {
-        
+        ProcessCommandTranslate(tokens);
     }
-    else if(command == "Scale")
+    else if(command == "Scale" || command == "scale")
     {
-        
+        ProcessCommandScale(tokens);
     }
-    else if(command == "Rotate")
+    else if(command == "Rotate" || command == "rotate")
     {
-        
+        ProcessCommandRotate(tokens);
     }
-    else if(command == "Clip")
+    else if(command == "Clip" || command == "clip")
     {
-        
+        ProcessCommandClip(tokens);
     }
-    else if(command == "ReadFile")
+    else if(command == "ReadFile" || command == "readfile" ||
+            command == "Readfile" || command == "readFile")
     {
-        
+        ProcessCommandReadFile(tokens);
     }
-    else if(command == "SaveToFile")
+    else if(command == "SaveFile" || command == "savefile" ||
+            command == "Savefile" || command == "saveFile")
     {
-        
+        ProcessCommandSaveFile(tokens);
+    }
+    else if(command == "Clear" || command == "clear")
+    {
+        Renderer::Instance()->ClearBuffer();
+        ObjectEditor::Instance()->ClearPolygons();
     }
     else
     {
         cout << "Invalid command, please enter another command" << endl;
         return;
     }
-
-//    Renderer::Instance()->DisplayPixelBuffer();
-//    glutPostRedisplay();
 }
 
 void InputOutputUtility::ProcessCommandPolygon(deque<string> tokens)
 {
-    deque<Vector2i> vertexPositions;
+    deque<Vector2i> vertexPositions = ExtractVertices(tokens);
     
-    long n = tokens.size();
-    for(int i = 0; i < n; i++)
+    if(vertexPositions.size() == 0)
     {
-        deque<string> vertex = SplitString(tokens[i], string("(),"));
-
-        if(vertex.size() != 2)
-        {
-            cout << "Invalid vertex format" << endl;
-            return;
-        }
-        
-        Vector2i vertPos = Vector2i(atoi(vertex[0].c_str()), atoi(vertex[1].c_str()));
-        vertexPositions.push_back(Vector2i(vertPos.mX, vertPos.mY));
+        cout << "Invalid command" << endl;
+        return;
     }
-    
     ObjectEditor::Instance()->CreatePolygon(vertexPositions, true);
 }
+
+void InputOutputUtility::ProcessCommandLine(deque<string> tokens)
+{
+    string algo = tokens[0];
+    tokens.pop_front();
+    
+    deque<Vector2i> vertexPositions = ExtractVertices(tokens);
+    
+    if(vertexPositions.size() != 2)
+    {
+        cout << "Invalid command" << endl;
+        return;
+    }
+    
+    Line line = Line(Point(vertexPositions[0].mX, vertexPositions[0].mY), Point(vertexPositions[1].mX, vertexPositions[1].mY));
+    
+    if(algo == "Bresenham")
+        GraphicsAlgorithm::LineBresenham(line);
+    else if(algo == "DDA")
+        GraphicsAlgorithm::LineDDA(line);
+    else
+        cout << "Invalid command" << endl;
+
+}
+
+void InputOutputUtility::ProcessCommandTranslate(deque<string> tokens)
+{
+    deque<Vector2i> vertexPositions = ExtractVertices(tokens);
+    
+    if(vertexPositions.size() != 1)
+    {
+        cout << "Invalid command" << endl;
+        return;
+    }
+    
+    ObjectEditor::Instance()->TranslatePolygon(vertexPositions[0], true);
+}
+
+void InputOutputUtility::ProcessCommandScale(deque<string> tokens)
+{
+    if(tokens.size() != 2)
+    {
+        cout << "Invalid command" << endl;
+        return;
+    }
+    
+    float scaleX = stof(tokens[0]);
+    float scaleY = stof(tokens[1]);
+    
+    ObjectEditor::Instance()->ScalePolygon(scaleX, scaleY, true);
+}
+void InputOutputUtility::ProcessCommandRotate(deque<string> tokens)
+{
+
+}
+void InputOutputUtility::ProcessCommandClip(deque<string> tokens)
+{}
+void InputOutputUtility::ProcessCommandReadFile(deque<string> tokens)
+{}
+void InputOutputUtility::ProcessCommandSaveFile(deque<string> tokens)
+{}
 
 void InputOutputUtility::ParsePolygonFile()
 {
@@ -194,4 +255,27 @@ deque<string> InputOutputUtility::SplitString(string s, string delims)
     
     return tokens;
 
+}
+
+deque<Vector2i> InputOutputUtility::ExtractVertices(deque<string> tokens)
+{
+    deque<Vector2i> vertexPositions;
+    
+    long n = tokens.size();
+    for(int i = 0; i < n; i++)
+    {
+        deque<string> vertex = SplitString(tokens[i], string("(),"));
+        
+        if(vertex.size() != 2)
+        {
+            cout << "Invalid vertex format" << endl;
+            vertexPositions.clear();
+            return vertexPositions;
+        }
+        
+        Vector2i vertPos = Vector2i(atoi(vertex[0].c_str()), atoi(vertex[1].c_str()));
+        vertexPositions.push_back(Vector2i(vertPos.mX, vertPos.mY));
+    }
+    
+    return vertexPositions;
 }
