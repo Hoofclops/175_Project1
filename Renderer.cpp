@@ -112,10 +112,12 @@ int Renderer::PosToIndex(Vector2i pos)
 void Renderer::DrawScene()
 {
     ClearBuffer();
-    ObjectEditor::Instance()->ClipScene();
+    
+    //Clip lines and polygons
+    deque<Line> lines;
+    ObjectEditor::Instance()->ClipScene(&lines);
     
     deque<Polygon> polys = ObjectEditor::Instance()->GetPolygons();
-    deque<Line> lines = ObjectEditor::Instance()->GetLines();
 
     //Draw polygons
     long n = polys.size();

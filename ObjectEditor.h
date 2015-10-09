@@ -35,12 +35,12 @@ public:
         return sInstance;
     }
     
-    static void CreatePolygon(deque<Vector2i> vertPositions, bool drawScene);
-    static void CreateLine(Line line, bool drawScene);
+    static void CreatePolygon(deque<Vector2i> vertPositions);
+    static void CreateLine(Line line);
     
-    static void TranslatePolygon(Vector2i translationVector, bool drawScene);
-    static void ScalePolygon(float scaleX, float scaleY, bool drawScene);
-    static void RotatePolygon(double degrees, bool drawScene);
+    static void TranslatePolygon(Vector2i translationVector);
+    static void ScalePolygon(float scaleX, float scaleY);
+    static void RotatePolygon(double degrees);
 
     static deque<Polygon> GetPolygons();
     static deque<Line> GetLines();
@@ -48,11 +48,9 @@ public:
     static Vector2i GetMaxClip();
         
     static void CycleSelectedPoly(bool forward);
-    
     static void ClearData();
-    static void ClipScene();
-    static void ClipScene(Vector2i minClip, Vector2i maxClip, bool drawScene);
-
+    static void ClipScene(deque<Line> *clippedLines);
+    static void SetClip(Vector2i minClip, Vector2i maxClip);
 };
 
 

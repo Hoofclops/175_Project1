@@ -23,23 +23,18 @@ ObjectEditor::ObjectEditor()
     sMaxClip = Vector2i(screenSize.mX, screenSize.mY);
 }
 
-void ObjectEditor::CreatePolygon(deque<Vector2i> vertPositions, bool drawScene)
+void ObjectEditor::CreatePolygon(deque<Vector2i> vertPositions)
 {
     Polygon poly = Polygon(vertPositions);
     sPolyList.push_back(poly);
-    if(drawScene)
-        Renderer::Instance()->DrawScene();
 }
 
-void ObjectEditor::CreateLine(Line line, bool drawScene)
+void ObjectEditor::CreateLine(Line line)
 {
     sLineList.push_back(line);
-    
-    if(drawScene)
-        Renderer::Instance()->DrawScene();
 }
 
-void ObjectEditor::TranslatePolygon(Vector2i translationVector, bool drawScene)
+void ObjectEditor::TranslatePolygon(Vector2i translationVector)
 {
     if(sSelectedPoly == -1)
         CycleSelectedPoly(true);
@@ -63,12 +58,9 @@ void ObjectEditor::TranslatePolygon(Vector2i translationVector, bool drawScene)
         vertices[i].SetY(y);
     }
     sPolyList[sSelectedPoly].SetVertices(vertices);
-    
-    if(drawScene)
-        Renderer::Instance()->DrawScene();
 }
 
-void ObjectEditor::ScalePolygon(float scaleX, float scaleY, bool drawScene)
+void ObjectEditor::ScalePolygon(float scaleX, float scaleY)
 {
     if(sSelectedPoly == -1)
         CycleSelectedPoly(true);
@@ -93,12 +85,9 @@ void ObjectEditor::ScalePolygon(float scaleX, float scaleY, bool drawScene)
         vertices[i].SetY(y);
     }
     sPolyList[sSelectedPoly].SetVertices(vertices);
-    
-    if(drawScene)
-        Renderer::Instance()->DrawScene();
 }
 
-void ObjectEditor::RotatePolygon(double degrees, bool drawScene)
+void ObjectEditor::RotatePolygon(double degrees)
 {
     if(sSelectedPoly == -1)
         CycleSelectedPoly(true);
@@ -129,9 +118,6 @@ void ObjectEditor::RotatePolygon(double degrees, bool drawScene)
         vertices[i].SetY(y);
     }
     sPolyList[sSelectedPoly].SetVertices(vertices);
-    
-    if(drawScene)
-        Renderer::Instance()->DrawScene();
 }
 
 deque<Polygon> ObjectEditor::GetPolygons()
@@ -164,7 +150,6 @@ void ObjectEditor::CycleSelectedPoly(bool forward)
         
         sSelectedPoly = 0;
         sPolyList[sSelectedPoly].SetSelected(true);
-        Renderer::Instance()->DrawScene();
         return;
     }
     
@@ -196,8 +181,6 @@ void ObjectEditor::CycleSelectedPoly(bool forward)
         sPolyList[sSelectedPoly].SetSelected(true);
 
     }
-    
-    Renderer::Instance()->DrawScene();
 }
 
 void ObjectEditor::ClearData()
@@ -207,31 +190,20 @@ void ObjectEditor::ClearData()
     sSelectedPoly = -1;
 }
 
-void ObjectEditor::ClipScene()
+void ObjectEditor::ClipScene(deque<Line> *clippedLines)
 {
     long n = sLineList.size();
     for(unsigned int i = 0; i < n; i++)
     {
         Line l = sLineList[i];
         GraphicsAlgorithm::LineClipCohenSutherland(sMinClip, sMaxClip, &l);
-        sLineList[i] = l;
+        clippedLines->push_back(l);
     }
 }
 
-void ObjectEditor::ClipScene(Vector2i minClip, Vector2i maxClip, bool drawScene)
-{
-    long n = sLineList.size();
-    for(unsigned int i = 0; i < n; i++)
-    {
-        Line l = sLineList[i];
-        GraphicsAlgorithm::LineClipCohenSutherland(minClip, maxClip, &l);
-        sLineList[i] = l;
-    }
-    
+void ObjectEditor::SetClip(Vector2i minClip, Vector2i maxClip)
+{    
     sMinClip = minClip;
     sMaxClip = maxClip;
-    
-    if(drawScene)
-        Renderer::Instance()->DrawScene();
 }
 

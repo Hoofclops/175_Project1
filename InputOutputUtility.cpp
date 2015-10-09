@@ -44,6 +44,7 @@ void InputOutputUtility::DetectInput(unsigned char key, int xmouse, int ymouse)
             break;
     }
     
+    Renderer::Instance()->DrawScene();
     glutPostRedisplay();
 }
 
@@ -117,7 +118,7 @@ void InputOutputUtility::ProcessCommandPolygon(deque<string> tokens)
         cout << "Invalid command" << endl;
         return;
     }
-    ObjectEditor::Instance()->CreatePolygon(vertexPositions, true);
+    ObjectEditor::Instance()->CreatePolygon(vertexPositions);
 }
 
 void InputOutputUtility::ProcessCommandLine(deque<string> tokens)
@@ -137,7 +138,7 @@ void InputOutputUtility::ProcessCommandLine(deque<string> tokens)
     
     Line line = Line(Point(vertexPositions[0].mX, vertexPositions[0].mY), Point(vertexPositions[1].mX, vertexPositions[1].mY));
     line.SetAlgorithm(algo);
-    ObjectEditor::Instance()->CreateLine(line, true);
+    ObjectEditor::Instance()->CreateLine(line);
 }
 
 void InputOutputUtility::ProcessCommandTranslate(deque<string> tokens)
@@ -150,7 +151,7 @@ void InputOutputUtility::ProcessCommandTranslate(deque<string> tokens)
         return;
     }
     
-    ObjectEditor::Instance()->TranslatePolygon(vertexPositions[0], true);
+    ObjectEditor::Instance()->TranslatePolygon(vertexPositions[0]);
 }
 
 void InputOutputUtility::ProcessCommandScale(deque<string> tokens)
@@ -164,7 +165,7 @@ void InputOutputUtility::ProcessCommandScale(deque<string> tokens)
     float scaleX = stof(tokens[0]);
     float scaleY = stof(tokens[1]);
     
-    ObjectEditor::Instance()->ScalePolygon(scaleX, scaleY, true);
+    ObjectEditor::Instance()->ScalePolygon(scaleX, scaleY);
 }
 void InputOutputUtility::ProcessCommandRotate(deque<string> tokens)
 {
@@ -176,7 +177,7 @@ void InputOutputUtility::ProcessCommandRotate(deque<string> tokens)
     
     double degrees = stod(tokens[0]);
     
-    ObjectEditor::Instance()->RotatePolygon(degrees, true);
+    ObjectEditor::Instance()->RotatePolygon(degrees);
 }
 
 void InputOutputUtility::ProcessCommandClip(deque<string> tokens)
@@ -189,7 +190,7 @@ void InputOutputUtility::ProcessCommandClip(deque<string> tokens)
         return;
     }
     
-    ObjectEditor::Instance()->ClipScene(vertexPositions[0], vertexPositions[1], true);
+    ObjectEditor::Instance()->SetClip(vertexPositions[0], vertexPositions[1]);
 }
 
 void InputOutputUtility::ProcessCommandLoadFile(deque<string> tokens)
@@ -250,7 +251,7 @@ void InputOutputUtility::ParsePolygonFile(string fileName)
         //Parse strings
         if(strcmp(tokens[0], "End") == 0 || strcmp(tokens[0], "end") == 0)
         {
-            ObjectEditor::Instance()->CreatePolygon(vertexPositions, true);
+            ObjectEditor::Instance()->CreatePolygon(vertexPositions);
             vertexPositions.clear();
         }
         else

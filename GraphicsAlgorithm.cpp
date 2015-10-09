@@ -566,7 +566,9 @@ void GraphicsAlgorithm::LineClipCohenSutherland(Vector2i minClip, Vector2i maxCl
         }
         else if(Reject(code1, code2)) //Reject line if completely outside
         {
-            done = true;
+            line->SetPointA(Point(0,0));
+            line->SetPointB(Point(0,0));
+            return;
         }
         else // line is partially inside
         {
