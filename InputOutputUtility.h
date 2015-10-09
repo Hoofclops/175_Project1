@@ -24,11 +24,7 @@ using namespace std;
 
 class InputOutputUtility
 {
-private:
-    static InputOutputUtility* sInstance;
-    
-    InputOutputUtility();
-    
+private:    
     static void ProcessInput();
     
     //commands
@@ -45,19 +41,10 @@ private:
     static deque<Vector2i> ExtractVertices(deque<string> tokens);
     
 public:
-    
-    static InputOutputUtility* Instance()
-    {
-        if(!sInstance)
-            sInstance = new InputOutputUtility;
-        return sInstance;
-    }
-    
     static void QueryWindowSize();
     static void DetectInput(unsigned char key, int xmouse, int ymouse);
     static void ParsePolygonFile(string fileName);
     static void SavePolygonFile(string fileName);
-
 };
 
 #endif /* defined(__Project1__InputOutputUtility__) */

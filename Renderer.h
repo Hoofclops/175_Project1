@@ -35,7 +35,7 @@ private:
     Renderer();
     
     //Convert coordinate position to appropriate array index in pixel buffer
-    static int PosToIndex(Vector2i pos);
+    int PosToIndex(Vector2i pos);
     
 public:
     
@@ -52,20 +52,20 @@ public:
         return sInstance;
     }
     
-    static void InitWindow(int xDim, int yDim);
+    void InitWindow(int xDim, int yDim);
     
     Vector2i GetScreenSize();
-    static void SetScreenSize(Vector2i size);
+    void SetScreenSize(Vector2i size);
     
-    static void DrawPoint(Point point);
-    static void DrawLine(Line line, Algo algo);
-    static void DrawPolygon(Polygon poly);
+    void DrawPoint(Point point);
+    void DrawLine(Line line, Algo algo);
+    void DrawPolygon(Polygon poly);
     
-    static void ClearBuffer();
+    void ClearBuffer();
     
     static void DisplayPixelBuffer();
 
-    static void DrawScene();
+    void DrawScene();
 };
 
 #endif /* defined(__Project1__Renderer__) */

@@ -9,10 +9,6 @@
 
 #include "InputOutputUtility.h"
 
-InputOutputUtility* InputOutputUtility::sInstance;
-
-InputOutputUtility::InputOutputUtility(){}
-
 void InputOutputUtility::QueryWindowSize()
 {
     int xDim, yDim;
