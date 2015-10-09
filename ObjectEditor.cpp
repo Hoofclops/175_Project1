@@ -1,4 +1,4 @@
-//
+ //
 //  ObjectEditor.cpp
 //  Project1
 //
@@ -12,10 +12,15 @@ ObjectEditor* ObjectEditor::sInstance;
 deque<Polygon> ObjectEditor::sPolyList;
 deque<Line> ObjectEditor::sLineList;
 int ObjectEditor::sSelectedPoly;
+Vector2i ObjectEditor::sMinClip;
+Vector2i ObjectEditor::sMaxClip;
 
 ObjectEditor::ObjectEditor()
 {
     sSelectedPoly = -1;
+    sMinClip = Vector2i(0,0);
+    Vector2i screenSize = Renderer::Instance()->GetScreenSize();
+    sMaxClip = Vector2i(screenSize.mX, screenSize.mY);
 }
 
 void ObjectEditor::CreatePolygon(deque<Vector2i> vertPositions, bool drawScene)
@@ -29,6 +34,7 @@ void ObjectEditor::CreatePolygon(deque<Vector2i> vertPositions, bool drawScene)
 void ObjectEditor::CreateLine(Line line, bool drawScene)
 {
     sLineList.push_back(line);
+    
     if(drawScene)
         Renderer::Instance()->DrawScene();
 }
@@ -138,6 +144,15 @@ deque<Line> ObjectEditor::GetLines()
     return sLineList;
 }
 
+Vector2i ObjectEditor::GetMinClip()
+{
+    return sMinClip;
+}
+
+Vector2i ObjectEditor::GetMaxClip()
+{
+    return sMaxClip;
+}
 
 void ObjectEditor::CycleSelectedPoly(bool forward)
 {
@@ -149,7 +164,7 @@ void ObjectEditor::CycleSelectedPoly(bool forward)
         
         sSelectedPoly = 0;
         sPolyList[sSelectedPoly].SetSelected(true);
-        Renderer::DrawScene();
+        Renderer::Instance()->DrawScene();
         return;
     }
     
@@ -182,7 +197,7 @@ void ObjectEditor::CycleSelectedPoly(bool forward)
 
     }
     
-    Renderer::DrawScene();
+    Renderer::Instance()->DrawScene();
 }
 
 void ObjectEditor::ClearData()
@@ -192,4 +207,31 @@ void ObjectEditor::ClearData()
     sSelectedPoly = -1;
 }
 
+void ObjectEditor::ClipScene()
+{
+    long n = sLineList.size();
+    for(unsigned int i = 0; i < n; i++)
+    {
+        Line l = sLineList[i];
+        GraphicsAlgorithm::LineClipCohenSutherland(sMinClip, sMaxClip, &l);
+        sLineList[i] = l;
+    }
+}
+
+void ObjectEditor::ClipScene(Vector2i minClip, Vector2i maxClip, bool drawScene)
+{
+    long n = sLineList.size();
+    for(unsigned int i = 0; i < n; i++)
+    {
+        Line l = sLineList[i];
+        GraphicsAlgorithm::LineClipCohenSutherland(minClip, maxClip, &l);
+        sLineList[i] = l;
+    }
+    
+    sMinClip = minClip;
+    sMaxClip = maxClip;
+    
+    if(drawScene)
+        Renderer::Instance()->DrawScene();
+}
 

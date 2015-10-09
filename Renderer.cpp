@@ -37,7 +37,7 @@ void Renderer::DrawPoint(Point point)
     
     Color color = point.GetColor();
     
-    if(pixelStart >= 0 && pixelStart + 2 < sScreenSize.mX * sScreenSize.mY * 3)
+    if(pixelStart >= 0 && pixelStart + 2 <= sScreenSize.mX * sScreenSize.mY * 3)
     {
         sPixelBuffer[pixelStart] = color.GetRed();
         sPixelBuffer[pixelStart + 1] = color.GetGreen();
@@ -112,15 +112,19 @@ int Renderer::PosToIndex(Vector2i pos)
 void Renderer::DrawScene()
 {
     ClearBuffer();
+    ObjectEditor::Instance()->ClipScene();
+    
     deque<Polygon> polys = ObjectEditor::Instance()->GetPolygons();
     deque<Line> lines = ObjectEditor::Instance()->GetLines();
 
+    //Draw polygons
     long n = polys.size();
     for(int i = 0; i < n; i++)
     {
         DrawPolygon(polys[i]);
     }
     
+    //Draw Lines
     n = lines.size();
     for(int i = 0; i < n; i++)
     {
@@ -137,6 +141,21 @@ void Renderer::DrawScene()
         {
             throw invalid_argument("Line has no algorithm");
         }
+    }
+    
+    //Draw Clipping lines
+    Vector2i minClip = ObjectEditor::Instance()->GetMinClip();
+    Vector2i maxClip = ObjectEditor::Instance()->GetMaxClip();
+    if(maxClip.mX < sScreenSize.mX && maxClip.mY < sScreenSize.mY)
+    {
+        Line l1 = Line(Point(minClip.mX, minClip.mY), Point(maxClip.mX, minClip.mY));
+        Line l2 = Line(Point(maxClip.mX, minClip.mY), Point(maxClip.mX, maxClip.mY));
+        Line l3 = Line(Point(maxClip.mX, maxClip.mY), Point(minClip.mX, maxClip.mY));
+        Line l4 = Line(Point(minClip.mX, maxClip.mY), Point(minClip.mX, minClip.mY));
+        GraphicsAlgorithm::LineDDA(l1);
+        GraphicsAlgorithm::LineDDA(l2);
+        GraphicsAlgorithm::LineDDA(l3);
+        GraphicsAlgorithm::LineDDA(l4);
     }
 }
 

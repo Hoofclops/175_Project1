@@ -18,6 +18,11 @@
 #include "Renderer.h"
 #include "Polygon.h"
 
+const GLint sBitCodeLeft = 0x1;
+const GLint sBitCodeRight = 0x2;
+const GLint sBitCodeTop = 0x4;
+const GLint sBitCodeBottom = 0x8;
+
 class GraphicsAlgorithm
 {
 private:
@@ -25,6 +30,7 @@ private:
     static int DetermineCase(float dy, float dx);
     static void HandlePositiveSlope(Point a, Point b, int dx, int dy);
     static void HandleNegativeSlope(Point a, Point b, int dx, int dy);
+    
     //Scan line helpers
     struct ScanData
     {
@@ -47,11 +53,21 @@ private:
     static void FillRemainingEdges(deque<Line> edges, list<ScanData> * remainingEdges);
     static bool SortActiveEdges(const ScanData first, const ScanData second);
     static void DrawScanLine(int curY, list<ScanData> activeEdges, bool drawGreen);
+    
+    //Cohen-Sutherland
+    static GLint Inside(GLint code);
+    static GLint Reject(GLint code1, GLint code2);
+    static GLint Accept(GLint code1, GLint code2);
+    static GLubyte Encode(Point point, Vector2i minClip, Vector2i maxClip);
+    static void SwapPoints(Point *p1, Point *p2);
+    static void SwapCodes(GLubyte *c1, GLubyte *c2);
+    
 public:
     static void LineDDA(Line line, bool drawGreen = false);
     static void LineBresenham(Line line);
     static void PolyScanLine(Polygon poly, bool drawGreen = false);
     static Vector2i FindPolyCentroid(Polygon poly);
+    static void LineClipCohenSutherland(Vector2i minClip, Vector2i maxClip, Line *line);
 };
 
 #endif /* defined(__Project1__GraphicsAlgorithm__) */

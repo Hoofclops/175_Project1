@@ -24,10 +24,9 @@ int main(int argc, char *argv[])
     
     ///////////////////////////////////////
     //TEST CODE////////////////////////////
-//    InputOutputUtility::Instance()->ParsePolygonFile("poly.txt");
-//    ObjectEditor::Instance()->TranslatePolygon(0, Vector2i(50, 50), true);
-//    ObjectEditor::Instance()->ScalePolygon(0,3.0f, 3.0f, true);
-//    ObjectEditor::Instance()->RotatePolygon(0, 10, true);
+//    Line l = Line(Point(0,0), Point(400,400));
+//    l.SetAlgorithm("DDA");
+//    ObjectEditor::Instance()->CreateLine(l, true);
     //END TEST/////////////////////////////
     ///////////////////////////////////////
     

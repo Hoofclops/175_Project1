@@ -305,6 +305,65 @@ void GraphicsAlgorithm::DrawScanLine(int curY, list<ScanData> activeEdges, bool 
  *ALGORITHM IMPLEMENTATION*
  **************************/
 
+GLint GraphicsAlgorithm::Inside(GLint code)
+{
+    return GLint(!code);
+}
+
+GLint GraphicsAlgorithm::Reject(GLint code1, GLint code2)
+{
+    return GLint(code1 & code2);
+}
+
+GLint GraphicsAlgorithm::Accept(GLint code1, GLint code2)
+{
+    return GLint(!(code1 | code2));
+}
+
+GLubyte GraphicsAlgorithm::Encode(Point point, Vector2i minClip, Vector2i maxClip)
+{
+    GLubyte code = 0x00;
+    
+    if(point.GetX() < minClip.mX)
+    {
+        code = code | sBitCodeLeft;
+    }
+    if(point.GetX() > maxClip.mX)
+    {
+        code = code | sBitCodeRight;
+    }
+    if(point.GetY() < minClip.mY)
+    {
+        code = code | sBitCodeBottom;
+    }
+    if(point.GetY() > maxClip.mY)
+    {
+        code = code | sBitCodeTop;
+    }
+    
+    return (code);
+}
+
+void GraphicsAlgorithm::SwapPoints(Point *p1, Point *p2)
+{
+    Point tmp;
+    tmp = *p1;
+    *p1 = *p2;
+    *p2 = tmp;
+}
+
+void GraphicsAlgorithm::SwapCodes(GLubyte *c1, GLubyte *c2)
+{
+    GLubyte tmp;
+    tmp = *c1;
+    *c1 = *c2;
+    *c2 = tmp;
+}
+
+/**************************
+ *ALGORITHM IMPLEMENTATION*
+ **************************/
+
 void GraphicsAlgorithm::LineDDA(Line line, bool drawGreen)
 {
     Color color = Color(1,1,1);
@@ -486,4 +545,96 @@ Vector2i GraphicsAlgorithm::FindPolyCentroid(Polygon poly)
     centroid.mY /= (6.0f * area);
     
     return centroid;
+}
+
+void GraphicsAlgorithm::LineClipCohenSutherland(Vector2i minClip, Vector2i maxClip, Line *line)
+{
+    GLubyte code1, code2;
+    GLint done = false, plotLine = false;
+    float m = 0;
+    Point p1 = line->GetPointA(), p2 = line->GetPointB();
+    
+    while(!done)
+    {
+        code1 = Encode(p1, minClip, maxClip);
+        code2 = Encode(p2, minClip, maxClip);
+        
+        if(Accept(code1, code2)) //Accept line if completely inside
+        {
+            done = true;
+            plotLine = true;
+        }
+        else if(Reject(code1, code2)) //Reject line if completely outside
+        {
+            done = true;
+        }
+        else // line is partially inside
+        {
+            //Make p1 = outside point
+            if(Inside(code1))
+            {
+                SwapPoints(&p1, &p2);
+                SwapCodes(&code1, &code2);
+            }
+            
+            //use slope m to find clip field intersections
+            if(p2.GetX() != p1.GetX())
+            {
+                m = (p2.GetY() - p1.GetY()) / (p2.GetX() - p1.GetX());
+            }
+            
+            if(code1 & sBitCodeLeft)
+            {
+                int x = p1.GetX(), y = p1.GetY();
+                
+                y += (minClip.mX - x) * m;
+                x = minClip.mX;
+                
+                p1.SetX(x);
+                p1.SetY(y);
+            }
+            else if(code1 & sBitCodeRight)
+            {
+                int x = p1.GetX(), y = p1.GetY();
+                
+                y += (maxClip.mX - x) * m;
+                x = maxClip.mX;
+                
+                p1.SetX(x);
+                p1.SetY(y);
+            }
+            else if(code1 & sBitCodeBottom)
+            {
+                int x = p1.GetX(), y = p1.GetY();
+                
+                if(p2.GetX() != p1.GetX())
+                {
+                    x += (minClip.mY - y) / m;
+                }
+                y = minClip.mY;
+                
+                p1.SetX(x);
+                p1.SetY(y);
+            }
+            else if(code1 & sBitCodeTop)
+            {
+                int x = p1.GetX(), y = p1.GetY();
+                
+                if(p2.GetX() != p1.GetX())
+                {
+                    x += (maxClip.mY - y) / m;
+                }
+                y = maxClip.mY;
+                
+                p1.SetX(x);
+                p1.SetY(y);
+            }
+        }
+        
+        if(plotLine)
+        {
+            line->SetPointA(p1);
+            line->SetPointB(p2);
+        }
+    }    
 }

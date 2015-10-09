@@ -23,7 +23,7 @@ void InputOutputUtility::QueryWindowSize()
     cin >> yDim;
     cin.ignore();
     
-    Renderer::Instance()->InitWindow(xDim, yDim);
+    Renderer::Instance()->InitWindow(xDim + 1, yDim + 1);
 }
 
 void InputOutputUtility::DetectInput(unsigned char key, int xmouse, int ymouse)
@@ -31,6 +31,9 @@ void InputOutputUtility::DetectInput(unsigned char key, int xmouse, int ymouse)
     switch(key)
     {
             case 'i':
+                ProcessInput();
+            break;
+            case 'I':
                 ProcessInput();
             break;
             case 'n':
@@ -175,8 +178,20 @@ void InputOutputUtility::ProcessCommandRotate(deque<string> tokens)
     
     ObjectEditor::Instance()->RotatePolygon(degrees, true);
 }
+
 void InputOutputUtility::ProcessCommandClip(deque<string> tokens)
-{}
+{
+    deque<Vector2i> vertexPositions = ExtractVertices(tokens);
+
+    if(vertexPositions.size() != 2)
+    {
+        cout << "Invalid command" << endl;
+        return;
+    }
+    
+    ObjectEditor::Instance()->ClipScene(vertexPositions[0], vertexPositions[1], true);
+}
+
 void InputOutputUtility::ProcessCommandLoadFile(deque<string> tokens)
 {
     if(tokens.size() != 1)
