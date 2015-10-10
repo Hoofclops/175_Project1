@@ -424,14 +424,16 @@ Vector2i GraphicsAlgorithm::Intersect(Vector2i p1, Vector2i p2, Boundary winEdge
     return iPt;
 }
 
-void GraphicsAlgorithm::ClipPoint(Vector2i p, Boundary winEdge, Vector2i minClip, Vector2i maxClip, Vector2i *pOut, int *cnt, Vector2i *first[], Vector2i *s)
+void GraphicsAlgorithm::ClipPoint(Vector2i p, Boundary winEdge, Vector2i minClip, Vector2i maxClip, Vector2i *pOut, int *cnt, deque<Vector2i> *first, Vector2i *s)
 {
     Vector2i iPt;
     
-    if(!first[winEdge])
+//    long n = first->size();
+//    long num = (int)winEdge;
+    if(first->size() == (int)winEdge)
     {
-        first[winEdge] = &p;
-        Vector2i v = *first[winEdge];
+        first->push_back(p);
+//        Vector2i v = first->at(winEdge);
     }
     else
     {
@@ -466,18 +468,18 @@ void GraphicsAlgorithm::ClipPoint(Vector2i p, Boundary winEdge, Vector2i minClip
     }
 }
 
-void GraphicsAlgorithm::CloseClip(Vector2i minClip, Vector2i maxClip, Vector2i *pOut, GLint *cnt, Vector2i *first[], Vector2i *s)
+void GraphicsAlgorithm::CloseClip(Vector2i minClip, Vector2i maxClip, Vector2i *pOut, GLint *cnt, deque<Vector2i> *first, Vector2i *s)
 {
     Vector2i pt;
     Boundary winEdge;
     
     for(winEdge = Left; winEdge <= Top; winEdge = (Boundary)(((int)winEdge)+1))
     {
-        Vector2i v = *first[winEdge];
-        
-        if(Cross(s[winEdge], *first[winEdge], winEdge, minClip, maxClip))
+//        long n = first->size();
+//        Vector2i v = first->at(winEdge);
+        if(Cross(s[winEdge], first->at(winEdge), winEdge, minClip, maxClip))
         {
-            pt = Intersect(s[winEdge], *first[winEdge], winEdge, minClip, maxClip);
+            pt = Intersect(s[winEdge], first->at(winEdge), winEdge, minClip, maxClip);
             if(winEdge < Top)
             {
                 ClipPoint(pt, (Boundary)(((int)winEdge)+1), minClip, maxClip, pOut, cnt, first, s);
@@ -775,18 +777,19 @@ void GraphicsAlgorithm::LineClipCohenSutherland(Vector2i minClip, Vector2i maxCl
 
 int GraphicsAlgorithm::PolygonClipSutherlandHodgman(Vector2i minClip, Vector2i maxClip, Polygon poly, Vector2i *pOut)
 {
-    Vector2i *first[4] = {0,0,0,0}, s[4];
+//    Vector2i *first[4] = {0,0,0,0},
+    deque<Vector2i> first;
+    Vector2i s[4];
     GLint cnt = 0;
     
     deque<Point> vertices = poly.GetVertices();
     long n = vertices.size();
     for(unsigned int i = 0; i < n; i++)
     {
-        Vector2i v = Vector2i(vertices[i].GetX(), vertices[i
-                                                           ].GetY());
-        ClipPoint(v, Left, minClip, maxClip, pOut, &cnt, first, s);
+        Vector2i v = Vector2i(vertices[i].GetX(), vertices[i].GetY());
+        ClipPoint(v, Left, minClip, maxClip, pOut, &cnt, &first, s);
     }
-    CloseClip(minClip, maxClip, pOut, &cnt, first, s);
+    CloseClip(minClip, maxClip, pOut, &cnt, &first, s);
     
     return cnt;
 }

@@ -67,8 +67,8 @@ private:
     static GLint InsidePoly(Vector2i p, Boundary b, Vector2i minClip, Vector2i maxClip);
     static GLint Cross(Vector2i p1, Vector2i p2, Boundary winEdge, Vector2i minClip, Vector2i maxClip);
     static Vector2i Intersect(Vector2i p1, Vector2i p2, Boundary winEdge, Vector2i minClip, Vector2i maxClip);
-    static void ClipPoint(Vector2i p, Boundary winEdge, Vector2i minClip, Vector2i maxClip, Vector2i *pOut, int *cnt, Vector2i *first[], Vector2i *s);
-    static void CloseClip(Vector2i minClip, Vector2i maxClip, Vector2i *pOut, GLint *cnt, Vector2i *first[], Vector2i *s);
+    static void ClipPoint(Vector2i p, Boundary winEdge, Vector2i minClip, Vector2i maxClip, Vector2i *pOut, int *cnt, deque<Vector2i> *first, Vector2i *s);
+    static void CloseClip(Vector2i minClip, Vector2i maxClip, Vector2i *pOut, GLint *cnt, deque<Vector2i> *first, Vector2i *s);
 
 public:
     static void LineDDA(Line line, bool drawGreen = false);
