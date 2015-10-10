@@ -190,7 +190,7 @@ void ObjectEditor::ClearData()
     sSelectedPoly = -1;
 }
 
-void ObjectEditor::ClipScene(deque<Line> *clippedLines)
+void ObjectEditor::ClipScene(deque<Line> *clippedLines, deque<Polygon> *clippedPolys)
 {
     long n = sLineList.size();
     for(unsigned int i = 0; i < n; i++)
@@ -198,6 +198,26 @@ void ObjectEditor::ClipScene(deque<Line> *clippedLines)
         Line l = sLineList[i];
         GraphicsAlgorithm::LineClipCohenSutherland(sMinClip, sMaxClip, &l);
         clippedLines->push_back(l);
+    }
+    
+    n = sPolyList.size();
+    for(unsigned int i = 0 ; i < n; i++)
+    {
+        Vector2i *pOut;
+        pOut = new Vector2i[100];
+        int count = GraphicsAlgorithm::PolygonClipSutherlandHodgman(sMinClip, sMaxClip, sPolyList[i], pOut);
+        
+        deque<Vector2i> vertices;
+        for(int i = 0; i < count; i++)
+        {
+            Vector2i v = Vector2i(pOut[i].mX, pOut[i].mY);
+            vertices.push_back(v);
+        }
+        Polygon p = Polygon(vertices);
+        
+        if(sPolyList[i].IsSelected())
+            p.SetSelected(true);
+        clippedPolys->push_back(p);
     }
 }
 

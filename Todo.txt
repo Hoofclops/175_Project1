@@ -1,3 +1,7 @@
 BUGS:
 When entering polygon command, excessive backspacing will cause invalid vertex format warning, just need to reenter string
 Rotate and scaling lines seg faults, dont do it please!
+Sometimes program will hang and appear to not respond to input, just try hitting enter in command line
+
+
+Sutherland Hodgman is supposed to return count so you know how long the vertex array is, also need to initialize arrays before passing in

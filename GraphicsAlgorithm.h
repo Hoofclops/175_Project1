@@ -62,12 +62,21 @@ private:
     static void SwapPoints(Point *p1, Point *p2);
     static void SwapCodes(GLubyte *c1, GLubyte *c2);
     
+    //Sutherland-Hodgman
+    typedef enum {Left, Right, Bottom, Top} Boundary;
+    static GLint InsidePoly(Vector2i p, Boundary b, Vector2i minClip, Vector2i maxClip);
+    static GLint Cross(Vector2i p1, Vector2i p2, Boundary winEdge, Vector2i minClip, Vector2i maxClip);
+    static Vector2i Intersect(Vector2i p1, Vector2i p2, Boundary winEdge, Vector2i minClip, Vector2i maxClip);
+    static void ClipPoint(Vector2i p, Boundary winEdge, Vector2i minClip, Vector2i maxClip, Vector2i *pOut, int *cnt, Vector2i *first[], Vector2i *s);
+    static void CloseClip(Vector2i minClip, Vector2i maxClip, Vector2i *pOut, GLint *cnt, Vector2i *first[], Vector2i *s);
+
 public:
     static void LineDDA(Line line, bool drawGreen = false);
     static void LineBresenham(Line line);
     static void PolyScanLine(Polygon poly, bool drawGreen = false);
     static Vector2i FindPolyCentroid(Polygon poly);
     static void LineClipCohenSutherland(Vector2i minClip, Vector2i maxClip, Line *line);
+    static int PolygonClipSutherlandHodgman(Vector2i minClip, Vector2i maxClip, Polygon poly, Vector2i *pOut);
 };
 
 #endif /* defined(__Project1__GraphicsAlgorithm__) */

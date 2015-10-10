@@ -115,10 +115,9 @@ void Renderer::DrawScene()
     
     //Clip lines and polygons
     deque<Line> lines;
-    ObjectEditor::Instance()->ClipScene(&lines);
+    deque<Polygon> polys;
+    ObjectEditor::Instance()->ClipScene(&lines, &polys);
     
-    deque<Polygon> polys = ObjectEditor::Instance()->GetPolygons();
-
     //Draw polygons
     long n = polys.size();
     for(int i = 0; i < n; i++)

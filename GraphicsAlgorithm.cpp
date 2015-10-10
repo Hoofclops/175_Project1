@@ -302,7 +302,7 @@ void GraphicsAlgorithm::DrawScanLine(int curY, list<ScanData> activeEdges, bool 
 }
 
 /**************************
- *ALGORITHM IMPLEMENTATION*
+ *COHEN SUTHERLAND HELPERS*
  **************************/
 
 GLint GraphicsAlgorithm::Inside(GLint code)
@@ -359,6 +359,138 @@ void GraphicsAlgorithm::SwapCodes(GLubyte *c1, GLubyte *c2)
     *c1 = *c2;
     *c2 = tmp;
 }
+
+/**************************
+ *SUTHERLAND HODGMAN HELPERS*
+ **************************/
+
+GLint GraphicsAlgorithm::InsidePoly(Vector2i p, Boundary b, Vector2i minClip, Vector2i maxClip)
+{
+    switch(b)
+    {
+        case Left:
+            if(p.mX < minClip.mX) return false;
+            break;
+        case Right:
+            if(p.mX > maxClip.mX) return false;
+            break;
+        case Bottom:
+            if(p.mY < minClip.mY) return false;
+            break;
+        case Top:
+            if(p.mY > maxClip.mY) return false;
+            break;
+    }
+    
+    return true;
+}
+
+GLint GraphicsAlgorithm::Cross(Vector2i p1, Vector2i p2, Boundary winEdge, Vector2i minClip, Vector2i maxClip)
+{
+    if(InsidePoly(p1, winEdge, minClip, maxClip) == InsidePoly(p2, winEdge, minClip, maxClip))
+        return false;
+    else
+        return true;
+}
+
+Vector2i GraphicsAlgorithm::Intersect(Vector2i p1, Vector2i p2, Boundary winEdge, Vector2i minClip, Vector2i maxClip)
+{
+    Vector2i iPt;
+    float m = 0;
+    
+    if(p1.mX != p2.mX) m = ((float)(p1.mY - p2.mY)) / ((float)(p1.mX - p2.mX));
+    switch(winEdge)
+    {
+        case Left:
+            iPt.mX = minClip.mX;
+            iPt.mY = p2.mY + (minClip.mX - p2.mX) * m;
+            break;
+        case Right:
+            iPt.mX = maxClip.mX;
+            iPt.mY = p2.mY + (maxClip.mX - p2.mX) * m;
+            break;
+        case Bottom:
+            iPt.mY = minClip.mY;
+            if(p1.mX != p2.mX) iPt.mX = p2.mX + (minClip.mY - p2.mY) / m;
+            else iPt.mX = p2.mX;
+            break;
+        case Top:
+            iPt.mY = maxClip.mY;
+            if(p1.mX != p2.mX) iPt.mX = p2.mX + (maxClip.mY - p2.mY) / m;
+            else iPt.mX = p2.mX;
+            break;
+    }
+    
+    return iPt;
+}
+
+void GraphicsAlgorithm::ClipPoint(Vector2i p, Boundary winEdge, Vector2i minClip, Vector2i maxClip, Vector2i *pOut, int *cnt, Vector2i *first[], Vector2i *s)
+{
+    Vector2i iPt;
+    
+    if(!first[winEdge])
+    {
+        first[winEdge] = &p;
+        Vector2i v = *first[winEdge];
+    }
+    else
+    {
+        if(Cross(p, s[winEdge], winEdge, minClip, maxClip))
+        {
+            iPt = Intersect(p, s[winEdge], winEdge, minClip, maxClip);
+            if(winEdge < Top)
+            {
+                ClipPoint(iPt, (Boundary)(((int)winEdge)+1), minClip, maxClip, pOut, cnt, first, s);
+            }
+            else
+            {
+                pOut[*cnt] = iPt;
+                (*cnt)++;
+            }
+        }
+    }
+    
+    s[winEdge] = p;
+    
+    if(InsidePoly(p, winEdge, minClip, maxClip))
+    {
+        if(winEdge < Top)
+        {
+            ClipPoint(p, (Boundary)(((int)winEdge)+1), minClip, maxClip, pOut, cnt, first, s);
+        }
+        else
+        {
+            pOut[*cnt] = p;
+            (*cnt)++;
+        }
+    }
+}
+
+void GraphicsAlgorithm::CloseClip(Vector2i minClip, Vector2i maxClip, Vector2i *pOut, GLint *cnt, Vector2i *first[], Vector2i *s)
+{
+    Vector2i pt;
+    Boundary winEdge;
+    
+    for(winEdge = Left; winEdge <= Top; winEdge = (Boundary)(((int)winEdge)+1))
+    {
+        Vector2i v = *first[winEdge];
+        
+        if(Cross(s[winEdge], *first[winEdge], winEdge, minClip, maxClip))
+        {
+            pt = Intersect(s[winEdge], *first[winEdge], winEdge, minClip, maxClip);
+            if(winEdge < Top)
+            {
+                ClipPoint(pt, (Boundary)(((int)winEdge)+1), minClip, maxClip, pOut, cnt, first, s);
+            }
+            else
+            {
+                pOut[*cnt] = pt;
+                (*cnt)++;
+            }
+        }
+    }
+}
+
 
 /**************************
  *ALGORITHM IMPLEMENTATION*
@@ -640,3 +772,22 @@ void GraphicsAlgorithm::LineClipCohenSutherland(Vector2i minClip, Vector2i maxCl
         }
     }    
 }
+
+int GraphicsAlgorithm::PolygonClipSutherlandHodgman(Vector2i minClip, Vector2i maxClip, Polygon poly, Vector2i *pOut)
+{
+    Vector2i *first[4] = {0,0,0,0}, s[4];
+    GLint cnt = 0;
+    
+    deque<Point> vertices = poly.GetVertices();
+    long n = vertices.size();
+    for(unsigned int i = 0; i < n; i++)
+    {
+        Vector2i v = Vector2i(vertices[i].GetX(), vertices[i
+                                                           ].GetY());
+        ClipPoint(v, Left, minClip, maxClip, pOut, &cnt, first, s);
+    }
+    CloseClip(minClip, maxClip, pOut, &cnt, first, s);
+    
+    return cnt;
+}
+

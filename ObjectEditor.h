@@ -49,7 +49,7 @@ public:
         
     void CycleSelectedPoly(bool forward);
     void ClearData();
-    void ClipScene(deque<Line> *clippedLines);
+    void ClipScene(deque<Line> *clippedLines, deque<Polygon> *clippedPolys);
     void SetClip(Vector2i minClip, Vector2i maxClip);
 };
 
