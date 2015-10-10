@@ -6,9 +6,10 @@
 //  Copyright (c) 2015 Brandon Nguyen. All rights reserved.
 //
 //  Works Cited:
-//  Code for DDA algorithm taken from text book page:
-//  Code for Bresenham based off of code from text book page:
-//  Clipping algorithms based off of code from text book page:
+//  Code for DDA algorithm based off of text book pages: 140
+//  Code for Bresenham algorithm based off of text book pages: 143-144
+//  Code for Cohen Sutherland algorithm based off of text book pages: 255-256
+//  Code for Sutherland Hodgman algorithm based off of text book pages: 267-269
 //  Scan Line Algorithm based off of one described on http://www.cs.rit.edu/~icss571/filling/index.html
 //  Centroid algorithm based off of http://stackoverflow.com/questions/2792443/finding-the-centroid-of-a-polygon described at https://en.wikipedia.org/wiki/Centroid#Centroid_of_polygon
 
