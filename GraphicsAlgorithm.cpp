@@ -8,6 +8,7 @@
 //  Works Cited:
 //  Code for DDA algorithm taken from text book page:
 //  Code for Bresenham based off of code from text book page:
+//  Clipping algorithms based off of code from text book page:
 //  Scan Line Algorithm based off of one described on http://www.cs.rit.edu/~icss571/filling/index.html
 //  Centroid algorithm based off of http://stackoverflow.com/questions/2792443/finding-the-centroid-of-a-polygon described at https://en.wikipedia.org/wiki/Centroid#Centroid_of_polygon
 
@@ -427,13 +428,9 @@ Vector2i GraphicsAlgorithm::Intersect(Vector2i p1, Vector2i p2, Boundary winEdge
 void GraphicsAlgorithm::ClipPoint(Vector2i p, Boundary winEdge, Vector2i minClip, Vector2i maxClip, Vector2i *pOut, int *cnt, deque<Vector2i> *first, Vector2i *s)
 {
     Vector2i iPt;
-    
-//    long n = first->size();
-//    long num = (int)winEdge;
     if(first->size() == (int)winEdge)
     {
         first->push_back(p);
-//        Vector2i v = first->at(winEdge);
     }
     else
     {
@@ -475,8 +472,6 @@ void GraphicsAlgorithm::CloseClip(Vector2i minClip, Vector2i maxClip, Vector2i *
     
     for(winEdge = Left; winEdge <= Top; winEdge = (Boundary)(((int)winEdge)+1))
     {
-//        long n = first->size();
-//        Vector2i v = first->at(winEdge);
         if(Cross(s[winEdge], first->at(winEdge), winEdge, minClip, maxClip))
         {
             pt = Intersect(s[winEdge], first->at(winEdge), winEdge, minClip, maxClip);
@@ -777,7 +772,6 @@ void GraphicsAlgorithm::LineClipCohenSutherland(Vector2i minClip, Vector2i maxCl
 
 int GraphicsAlgorithm::PolygonClipSutherlandHodgman(Vector2i minClip, Vector2i maxClip, Polygon poly, Vector2i *pOut)
 {
-//    Vector2i *first[4] = {0,0,0,0},
     deque<Vector2i> first;
     Vector2i s[4];
     GLint cnt = 0;
@@ -789,6 +783,15 @@ int GraphicsAlgorithm::PolygonClipSutherlandHodgman(Vector2i minClip, Vector2i m
         Vector2i v = Vector2i(vertices[i].GetX(), vertices[i].GetY());
         ClipPoint(v, Left, minClip, maxClip, pOut, &cnt, &first, s);
     }
+    
+    //Reject if completely outside
+    if(cnt == 0)
+    {
+        pOut[0] = Vector2i(0,0);
+        pOut[1] = Vector2i(0,0);
+        return 2;
+    }
+    
     CloseClip(minClip, maxClip, pOut, &cnt, &first, s);
     
     return cnt;
