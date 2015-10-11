@@ -5,3 +5,8 @@ Sometimes program will hang and appear to not respond to input, just try hitting
 
 
 Sutherland Hodgman is supposed to return count so you know how long the vertex array is, also need to initialize arrays before passing in
+
+TODO:
+Fix line SetAlgorithm(), wtf is this for??
+Make all lines polygons and all polygons lines
+Make transformations on 2 vertex polygons work

@@ -247,7 +247,19 @@ void InputOutputUtility::ParsePolygonFile(string fileName)
         //Parse strings
         if(strcmp(tokens[0], "End") == 0 || strcmp(tokens[0], "end") == 0)
         {
-            ObjectEditor::Instance()->CreatePolygon(vertexPositions);
+            if(vertexPositions.size() == 2)
+            {
+                Line l = Line(Point(vertexPositions[0].mX, vertexPositions[0].mY),
+                              Point(vertexPositions[1].mX, vertexPositions[1].mY));
+                l.SetAlgorithm("DDA");
+                ObjectEditor::Instance()->CreateLine(l);
+
+            }
+            else
+            {
+                ObjectEditor::Instance()->CreatePolygon(vertexPositions);
+            }
+            
             vertexPositions.clear();
         }
         else
@@ -268,6 +280,7 @@ void InputOutputUtility::SavePolygonFile(string fileName)
     fout.open("//Users//BrandonHome//Desktop//175//Project1//Project1//" + fileName, ofstream::out | ofstream::trunc);
     
     deque<Polygon> allPolys = ObjectEditor::Instance()->GetPolygons();
+    deque<Line> allLines = ObjectEditor::Instance()->GetLines();
     
     long polyCount = allPolys.size();
     for(unsigned int i = 0; i < polyCount; i++)
@@ -279,6 +292,14 @@ void InputOutputUtility::SavePolygonFile(string fileName)
         {
             fout << vertices[j].GetX() << "," << vertices[j].GetY() << "\n";
         }
+        fout << "End" << "\n" << "\n";
+    }
+    
+    long lineCount = allLines.size();
+    for(unsigned int i = 0; i < lineCount; i++)
+    {
+        fout << allLines[i].GetPointA().GetX() << "," << allLines[i].GetPointA().GetY()<< "\n";
+        fout << allLines[i].GetPointB().GetX() << "," << allLines[i].GetPointB().GetY()<< "\n";
         fout << "End" << "\n" << "\n";
     }
     
