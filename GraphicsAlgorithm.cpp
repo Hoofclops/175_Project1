@@ -712,7 +712,7 @@ void GraphicsAlgorithm::LineClipCohenSutherland(Vector2i minClip, Vector2i maxCl
             //use slope m to find clip field intersections
             if(p2.GetX() != p1.GetX())
             {
-                m = (p2.GetY() - p1.GetY()) / (p2.GetX() - p1.GetX());
+                m = ((float)(p2.GetY() - p1.GetY())) / ((float)(p2.GetX() - p1.GetX()));
             }
             
             if(code1 & sBitCodeLeft)
