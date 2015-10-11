@@ -5,7 +5,7 @@
 //  Created by Brandon Nguyen on 9/28/15.
 //  Copyright (c) 2015 Brandon Nguyen. All rights reserved.
 //
-//  Code based off of code from http://cs.dvc.edu/HowTo_Cparse.html
+//  Parse polygon file Code based off of code from http://cs.dvc.edu/HowTo_Cparse.html
 
 #include "InputOutputUtility.h"
 
@@ -253,7 +253,6 @@ void InputOutputUtility::ParsePolygonFile(string fileName)
                               Point(vertexPositions[1].mX, vertexPositions[1].mY));
                 l.SetAlgorithm("DDA");
                 ObjectEditor::Instance()->CreateLine(l);
-
             }
             else
             {
